@@ -9,10 +9,10 @@
       "description": "Enable 'aaa authentication login' (Automated)",
       "check_command": "show run | incl aaa authentication login",
       "check_expected_output": "",
-      "set_command": "aaa authentication login {default | aaa_list_name} [passwd- expiry] [method1] [method2]"
+      "set_command": "aaa authentication login {default | aaa_list_name} [passwd- expiry] [method1]"
     },
     "1.1.3": {
-      "description": "show running-config | incl aaa authentication enable",
+      "description": "Enable 'aaa authentication enable default' (Automated)",
       "check_command": "show running-config | incl aaa authentication enable",
       "check_expected_output": "",
       "set_command": "aaa authentication enable default {method1} enable"
@@ -20,8 +20,8 @@
     "1.1.4": {
       "description": "Set 'login authentication for 'line con 0' (Automated)",
       "check_command": "sh run | sec line | incl login authentication",
-      "check_expected_output": "",
-      "set_command": "line con 0\naaa authentication login"
+      "check_expected_output": "*login authentication*",
+      "set_command": "line con 0\nlogin authentication {default | aaa_list_name}"
     },
     "1.1.5": {
       "description": "Set 'login authentication for 'line tty' (Automated)",
@@ -391,225 +391,153 @@
     },
     "2.4.3": {
       "description": "Set 'ntp source' to Loopback Interface (Automated)",
-      "check_command": "",
+      "check_command": "sh run | incl ntp source",
       "check_expected_output": "",
-      "set_command": "ntp source loopback"
+      "set_command": "ntp source loopback {<em>loopback_interface_number}</em>"
     },
     "2.4.4": {
       "description": "Set 'ip tftp source-interface' to the Loopback Interface (Automated)",
-      "check_command": "",
+      "check_command": "sh run | incl tftp source-interface",
       "check_expected_output": "",
-      "set_command": "ip tftp source-interface loopback"
+      "set_command": "ip tftp source-interface loopback {<em>loobpback_interface_number</em>}"
     },
     "3.1.1": {
       "description": "Set 'no ip source-route' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | incl ip source-route",
       "check_expected_output": "",
       "set_command": "no ip source-route"
     },
     "3.1.2": {
       "description": "Set 'no ip proxy-arp' (Manual)",
-      "check_command": "",
+      "check_command": "sh ip int {<em>interface</em>} | incl proxy-arp#sh ip int {<em>interface</em>} | incl proxy-arp",
       "check_expected_output": "",
-      "set_command": "no ip proxy-arp"
+      "set_command": "interface {interface}\nno ip proxy-arp"
     },
     "3.1.3": {
       "description": "Set 'no interface tunnel' (Automated)",
-      "check_command": "",
+      "check_command": "sh ip int brief | incl tunnel",
       "check_expected_output": "",
-      "set_command": "no interface tunnel"
+      "set_command": "no interface tunnel {<em>instance</em>}"
     },
     "3.1.4": {
       "description": "Set 'ip verify unicast source reachable-via' (Automated)",
-      "check_command": "",
+      "check_command": "sh ip int {<em>interface</em>} | incl verify source",
       "check_expected_output": "",
-      "set_command": "ip verify unicast source reachable-via"
+      "set_command": "interface {<em>interface_name</em>}\nip verify unicast source reachable-via rx"
     },
     "3.2.1": {
       "description": "Set 'ip access-list extended' to Forbid Private Source Addresses from External Networks (Manual)",
-      "check_command": "",
+      "check_command": "sh ip access-list {<em>name | number</em>}",
       "check_expected_output": "",
-      "set_command": "ip access-list extended"
+      "set_command": "#ip access-list extended {<span><em>name | number</em>}\ndeny ip {</span><em>internal_networks</em>} any log\ndeny ip 127.0.0.0 0.255.255.255 any log\ndeny ip 10.0.0.0 0.255.255.255 any log\ndeny ip 0.0.0.0 0.255.255.255 any log\ndeny ip 172.16.0.0 0.15.255.255 any log\ndeny ip 192.168.0.0 0.0.255.255 any log\ndeny ip 192.0.2.0 0.0.0.255 any log\ndeny ip 169.254.0.0 0.0.255.255 any log\ndeny ip 224.0.0.0 31.255.255.255 any log\ndeny ip host 255.255.255.255 any log\npermit {protocol} {source_ip} {source_mask} {destination} {destination_mask} log\ndeny any any log\ninterface <external_<em>interface</em>>\naccess-group <<em>access-list</em>> in"
     },
     "3.2.2": {
       "description": "Set inbound 'ip access-group' on the External Interface (Manual)",
-      "check_command": "",
+      "check_command": "sh run | sec interface {<em>external_interface</em>}",
       "check_expected_output": "",
-      "set_command": "ip access-group"
+      "set_command": "interface {external_interface}\nip access-group {name | number} in"
     },
     "3.3.1.1": {
       "description": "Set 'key chain' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec key chain",
       "check_expected_output": "",
-      "set_command": "key chain"
+      "set_command": "key chain {<em>key-chain_name</em>}"
     },
     "3.3.1.2": {
       "description": "Set 'key' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec key chain",
       "check_expected_output": "",
-      "set_command": "key"
+      "set_command": "key chain {name}\nkey {<em>key-number</em>}"
     },
     "3.3.1.3": {
       "description": "Set 'key-string' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec key chain",
       "check_expected_output": "",
-      "set_command": "key-string"
+      "set_command": "key chain {name}\nkey {number}\nkey-string <<em>key-string</em>>"
     },
     "3.3.1.4": {
       "description": "Set 'address-family ipv4 autonomous-system' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec router eigrp",
       "check_expected_output": "",
-      "set_command": "address-family ipv4 autonomous-system"
+      "set_command": "router eigrp <<em>virtual-instance-name</em>>\naddress-family ipv4 autonomous-system {<em>eigrp_as- number</em>}"
     },
     "3.3.1.5": {
       "description": "Set 'af-interface default' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec router eigrp",
       "check_expected_output": "",
-      "set_command": "af-interface default"
+      "set_command": "router eigrp <<em>virtual-instance-name</em>>\naddress-family ipv4 autonomous-system {<em>eigrp_as- number</em>}\naf-interface default"
     },
     "3.3.1.6": {
       "description": "Set 'authentication key-chain' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec router eigrp",
       "check_expected_output": "",
-      "set_command": "authentication key-chain"
+      "set_command": "router eigrp <virtual-instance-name>\nddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication key-chain {eigrp_key- chain_name}"
     },
     "3.3.1.7": {
       "description": "Set 'authentication mode md5' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec router eigrp",
       "check_expected_output": "",
-      "set_command": "authentication mode md5"
+      "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication mode md5"
     },
     "3.3.1.8": {
       "description": "Set 'ip authentication key-chain eigrp' (Automated)",
-      "check_command": "",
+      "check_command": "sh ip eigrp int\nsh run int {<em>interface_name</em>} | incl key-chain",
       "check_expected_output": "",
-      "set_command": "ip authentication key-chain eigrp"
+      "set_command": "interface {<em>interface_name</em>}\nip authentication key-chain eigrp {<em>eigrp_as- number</em>} {<em>eigrp_key-chain_name</em>}"
     },
     "3.3.1.9": {
       "description": "Set 'ip authentication mode eigrp' (Automated)",
-      "check_command": "",
+      "check_command": "sh ip eigrp int\nsh run int {<em>interface_name</em>} | incl authentication mode",
       "check_expected_output": "",
-      "set_command": "ip authentication mode eigrp"
+      "set_command": "interface {<em>interface_name</em>}\nip authentication mode eigrp {<em><span>eigrp_as- number</span></em><span>}</span> md5"
     },
     "3.3.2.1": {
       "description": "Set 'authentication message-digest' for OSPF area (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec router ospf",
       "check_expected_output": "",
-      "set_command": "authentication message-digest"
+      "set_command": "router ospf <<em>ospf_process-id</em>>\narea <<em>ospf_area-id</em>> authentication message- digest"
     },
     "3.3.2.2": {
       "description": "Set 'ip ospf message-digest-key md5' (Automated)",
-      "check_command": "",
+      "check_command": "sh run int {<em>interface</em>}",
       "check_expected_output": "",
-      "set_command": "ip ospf message-digest-key md5"
+      "set_command": "interface {<em>interface_name</em>}\nip ospf message-digest-key {<em>ospf_md5_key-id</em>} md5 {<em>ospf_md5_key</em>}"
     },
     "3.3.3.1": {
       "description": "Set 'key chain' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec key chain",
       "check_expected_output": "",
-      "set_command": "key chain"
+      "set_command": "key chain {<em>rip_key-chain_name</em>}"
     },
     "3.3.3.2": {
       "description": "Set 'key' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec key chain",
       "check_expected_output": "",
-      "set_command": "key"
+      "set_command": "key {<em>key-number</em>}"
     },
     "3.3.3.3": {
       "description": "Set 'key-string' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec key chain",
       "check_expected_output": "",
-      "set_command": "key-string"
+      "set_command": "key-string <<em>key-string</em>>"
     },
     "3.3.3.4": {
       "description": "Set 'interface' for RIPv2 (Automated)",
-      "check_command": "",
+      "check_command": "sh run int {<em>interface_name</em>}",
       "check_expected_output": "",
-      "set_command": "interface"
+      "set_command": "interface {<em>interface_name</em>}\nip rip authentication key-chain {<em>rip_key- chain_name</em>}"
     },
     "3.3.3.5": {
       "description": "Set 'authentication mode md5' for RIPv2 (Automated)",
-      "check_command": "",
+      "check_command": "sh run int <<em>interface</em>>",
       "check_expected_output": "",
-      "set_command": "authentication mode md5"
+      "set_command": "interface <<em>interface_name</em>>\nip rip authentication mode md5"
     },
     "3.3.4.1": {
       "description": "Set 'password' (Automated)",
-      "check_command": "",
+      "check_command": "sh run | sec router bgp",
       "check_expected_output": "",
-      "set_command": "password"
-    },
-    "3.3.4.2": {
-      "description": "Set 'neighbor' for BGP (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "neighbor"
-    },
-    "3.3.4.3": {
-      "description": "Set 'update-source' for BGP (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "update-source"
-    },
-    "3.3.4.4": {
-      "description": "Set 'authentication' for BGP (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "authentication"
-    },
-    "3.4": {
-      "description": "MAC Filtering",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": ""
-    },
-    "3.4.1": {
-      "description": "Set 'port-security' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "port-security"
-    },
-    "3.4.2": {
-      "description": "Set 'switchport port-security mac-address' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "switchport port-security mac-address"
-    },
-    "3.4.3": {
-      "description": "Set 'switchport port-security violation' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "switchport port-security violation"
-    },
-    "3.4.4": {
-      "description": "Set 'switchport port-security maximum' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "switchport port-security maximum"
-    },
-    "3.4.5": {
-      "description": "Set 'switchport port-security aging' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "switchport port-security aging"
-    },
-    "3.4.6": {
-      "description": "Set 'switchport port-security aging-time' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "switchport port-security aging-time"
-    },
-    "3.4.7": {
-      "description": "Set 'switchport port-security aging-type' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "switchport port-security aging-type"
-    },
-    "3.4.8": {
-      "description": "Set 'mac access-list' (Automated)",
-      "check_command": "",
-      "check_expected_output": "",
-      "set_command": "mac access-list"
+      "set_command": "router bgp <<em>bgp_as-number</em>>\nneighbor <<em>bgp_neighbor-ip</em> | <em>peer-group- name</em>> password <<em>password</em>>"
     }
   }
   
