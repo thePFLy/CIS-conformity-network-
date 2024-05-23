@@ -1,4 +1,10 @@
-{
+{   
+    "1": {
+      "description": "Management Plane"
+    },
+    "1.1": {
+      "description": "Local Authentication, Authorization and Accounting (AAA) Rules"
+    },
     "1.1.1": {
       "description": "Enable 'aaa new-model' (Automated)",
       "check_command": "show running-config | incl aaa new-model",
@@ -64,6 +70,9 @@
       "check_command": "sh run | incl aaa accounting system",
       "check_expected_output": "aaa accounting system*",
       "set_command": "aaa accounting system {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}"
+    },
+    "1.2": {
+      "description": "Access Rules"
     },
     "1.2.1": {
       "description": "Set 'privilege 1' for local users (Automated)",
@@ -131,6 +140,9 @@
       "check_expected_output": "*transport input none*",
       "set_command": "line aux 0\ntransport input none"
     },
+    "1.3": {
+      "description": "Banner Rules"
+    },
     "1.3.1": {
       "description": "Set the 'banner-text' for 'banner exec' (Automated)",
       "check_command": "sh running-config | beg banner exec",
@@ -149,6 +161,9 @@
       "check_expected_output": "",
       "set_command": "banner motd c\n<banner motd> c"
     },
+    "1.4": {
+      "description": "Password Rules"
+    },
     "1.4.1": {
       "description": "Set 'password' for 'enable secret' (Automated)",
       "check_command": "sh run | incl enable secret",
@@ -166,6 +181,9 @@
       "check_command": "show run | incl username",
       "check_expected_output": "*username * secret *",
       "set_command": "username {LOCAL_USERNAME} secret {LOCAL_PASSWORD}"
+    },
+    "1.5": {
+      "description": "SNMP Rules"
     },
     "1.5.1": {
       "description": "Set 'no snmp-server' to disable SNMP when unused (Automated)",
@@ -226,6 +244,18 @@
       "check_command": "show snmp user",
       "check_expected_output": "*snmp-server user {user_name} {group_name} v3 auth sha {auth_password} priv aes 128 {priv_password} {acl_name_or_number}*",
       "set_command": "snmp-server user {user_name} {group_name} v3 auth sha {auth_password} priv aes 128 {priv_password} {acl_name_or_number}"
+    },
+    "2": {
+      "description": "Control Plane"
+    },
+    "2.1": {
+      "description": "Global Service Rules"
+    },
+    "2.1.1": {
+      "description": "Setup SSH"
+    },
+    "2.1.1.1": {
+      "description": "Configure Prerequisites for the SSH Service"
     },
     "2.1.1.1.1": {
       "description": "Set the 'hostname' (Automated)",
@@ -305,6 +335,9 @@
       "check_expected_output": "no service pad",
       "set_command": "no service pad"
     },
+    "2.2": {
+      "description": "Logging Rules"
+    },
     "2.2.1": {
       "description": "Set 'logging on' (Automated)",
       "check_command": "show logging | include logging",
@@ -347,6 +380,12 @@
       "check_expected_output": "*logging source-interface*",
       "set_command": "logging source-interface loopback {loopback_interface_number}"
     },
+    "2.3": {
+      "description": "NTP Rules"
+    },
+    "2.3.1": {
+      "description": "Require Encryption Keys for NTP"
+    },
     "2.3.1.1": {
       "description": "Set 'ntp authenticate' (Automated)",
       "check_command": "show run | include ntp",
@@ -377,6 +416,9 @@
       "check_expected_output": "*ntp server *",
       "set_command": "ntp server {ntp-server_ip_address}"
     },
+    "2.4": {
+      "description": "Loopback Rules"
+    },
     "2.4.1": {
       "description": "Create a single 'interface loopback' (Automated)",
       "check_command": "sh ip int brief | incl Loopback",
@@ -400,6 +442,12 @@
       "check_command": "sh run | incl tftp source-interface",
       "check_expected_output": "*ip tftp source-interface loopback*",
       "set_command": "ip tftp source-interface loopback {loobpback_interface_number}"
+    },
+    "3": {
+      "description": "Data Plane"
+    },
+    "3.1": {
+      "description": "Routing Rules"
     },
     "3.1.1": {
       "description": "Set 'no ip source-route' (Automated)",
@@ -425,6 +473,9 @@
       "check_expected_output": "",
       "set_command": "interface {interface_name}\nip verify unicast source reachable-via rx"
     },
+    "3.2": {
+      "description": "Border Router Filtering"
+    },
     "3.2.1": {
       "description": "Set 'ip access-list extended' to Forbid Private Source Addresses from External Networks (Manual)",
       "check_command": "sh ip access-list {name | number}",
@@ -436,6 +487,12 @@
       "check_command": "sh run | sec interface {external_interface}",
       "check_expected_output": "",
       "set_command": "interface {external_interface}\nip access-group {name | number} in"
+    },
+    "3.3": {
+      "description": "Neighbor Authentication"
+    },
+    "3.3.1": {
+      "description": "Require EIGRP Authentication if Protocol is Used"
     },
     "3.3.1.1": {
       "description": "Set 'key chain' (Automated)",
@@ -479,6 +536,9 @@
       "check_expected_output": "*authentication mode md5*",
       "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication mode md5"
     },
+    "3.3.2": {
+      "description": "Require OSPF Authentication if Protocol is Used"
+    },
     "3.3.2.1": {
       "description": "Set 'authentication message-digest' for OSPF area (Automated)",
       "check_command": "sh run | sec router ospf",
@@ -490,6 +550,9 @@
       "check_command": "sh run int {interface}",
       "check_expected_output": "*ip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}*",
       "set_command": "interface {interface_name}\nip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}"
+    },
+    "3.3.3": {
+      "description": "Require RIPv2 Authentication if Protocol is Used"
     },
     "3.3.3.1": {
       "description": "Set 'key chain' (Automated)",
