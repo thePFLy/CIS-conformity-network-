@@ -2,19 +2,19 @@
     "1.1.1": {
       "description": "Enable 'aaa new-model' (Automated)",
       "check_command": "show running-config | incl aaa new-model",
-      "check_expected_output": "*no*",
+      "check_expected_output": "aaa new-model",
       "set_command": "aaa new-model"
     },
     "1.1.2": {
       "description": "Enable 'aaa authentication login' (Automated)",
       "check_command": "show run | incl aaa authentication login",
-      "check_expected_output": "",
+      "check_expected_output": "aaa authentication login*",
       "set_command": "aaa authentication login {default | aaa_list_name} [passwd- expiry] [method1]"
     },
     "1.1.3": {
       "description": "Enable 'aaa authentication enable default' (Automated)",
       "check_command": "show running-config | incl aaa authentication enable",
-      "check_expected_output": "",
+      "check_expected_output": "aaa authentication enable default*",
       "set_command": "aaa authentication enable default {method1} enable"
     },
     "1.1.4": {
@@ -27,306 +27,306 @@
       "description": "Set 'login authentication for 'line tty' (Automated)",
       "check_command": "sh run | sec line | incl login authentication",
       "check_expected_output": "",
-      "set_command": "line tty {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}"
+      "set_command": "line {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}"
     },
     "1.1.6": {
       "description": "Set 'login authentication for 'line vty' (Automated)",
       "check_command": "sh run | sec line | incl login authentication",
       "check_expected_output": "",
-      "set_command": "line vty {line-number} [<em>ending-line-number]\nlogin authentication {default | aaa_list_name}"
+      "set_command": "line vty {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}"
     },
     "1.1.7": {
       "description": "Set 'aaa accounting' to log all privileged use commands using 'commands 15' (Automated)",
       "check_command": "sh run | incl aaa accounting commands",
-      "check_expected_output": "",
+      "check_expected_output": "aaa accounting commands 15*",
       "set_command": "aaa accounting commands 15 {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}"
     },
     "1.1.8": {
       "description": "Set 'aaa accounting connection' (Automated)",
       "check_command": "sh run | incl aaa accounting connection",
-      "check_expected_output": "",
+      "check_expected_output": "aaa accounting connection*",
       "set_command": "aaa accounting connection {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}"
     },
     "1.1.9": {
       "description": "Set 'aaa accounting exec' (Automated)",
       "check_command": "sh run | incl aaa accounting exec",
-      "check_expected_output": "",
+      "check_expected_output": "aaa accounting exec*",
       "set_command": "aaa accounting exec {default | list-name | guarantee-first} {start-stop | stop-only | none} {radius | group group-name}"
     },
     "1.1.10": {
       "description": "Set 'aaa accounting network' (Automated)",
       "check_command": "sh run | incl aaa accounting network",
-      "check_expected_output": "",
+      "check_expected_output": "aaa accounting network*",
       "set_command": "aaa accounting network {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}"
     },
     "1.1.11": {
       "description": "Set 'aaa accounting system' (Automated)",
       "check_command": "sh run | incl aaa accounting system",
-      "check_expected_output": "",
+      "check_expected_output": "aaa accounting system*",
       "set_command": "aaa accounting system {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}"
     },
     "1.2.1": {
       "description": "Set 'privilege 1' for local users (Automated)",
       "check_command": "show run | incl privilege",
-      "check_expected_output": "",
+      "check_expected_output": "username <LOCAL_USERNAME> privilege 1",
       "set_command": "username <LOCAL_USERNAME> privilege 1"
     },
     "1.2.2": {
       "description": "Set 'transport input ssh' for 'line vty' connections (Automated)",
       "check_command": "sh run | sec vty",
-      "check_expected_output": "",
+      "check_expected_output": "*transport input ssh*",
       "set_command": "line vty <line-number> <ending-line-number>\ntransport input ssh"
     },
     "1.2.3": {
       "description": "Set 'no exec' for 'line aux 0' (Automated)",
       "check_command": "sh run | sec aux",
-      "check_expected_output": "no exec",
+      "check_expected_output": "*no exec*",
       "set_command": "line aux 0\nno exec"
     },
     "1.2.4": {
       "description": "Create 'access-list' for use with 'line vty' (Automated)",
       "check_command": "sh ip access-list <vty_acl_number>",
-      "check_expected_output": "",
+      "check_expected_output": "*permit tcp <vty_acl_block_with_mask> any*, *permit tcp host <vty_acl_host> any*,*deny ip any any log*",
       "set_command": "access-list <vty_acl_number> permit tcp <vty_acl_block_with_mask> any\naccess-list <vty_acl_number> permit tcp host <vty_acl_host> any\ndeny ip any any log"
     },
     "1.2.5": {
       "description": "Set 'access-class' for 'line vty' (Automated)",
       "check_command": "sh run | sec vty <line-number> <ending-line-number>",
-      "check_expected_output": "",
+      "check_expected_output": "*access-class <vty_acl_number> in*",
       "set_command": "line vty <line-number> <ending-line-number>\naccess-class <vty_acl_number> in"
     },
     "1.2.6": {
       "description": "Set 'exec-timeout' to less than or equal to 10 minutes for 'line aux 0' (Automated)",
       "check_command": "sh run | sec line aux 0",
-      "check_expected_output": "",
+      "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
       "set_command": "line aux 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>"
     },
     "1.2.7": {
       "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line console 0' (Automated)",
       "check_command": "sh run | sec line con 0",
-      "check_expected_output": "",
+      "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
       "set_command": "line console 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>"
     },
     "1.2.8": {
       "description": "Set 'exec-timeout' less than or equal to 10 minutes 'line tty' (Automated)",
       "check_command": "sh line tty <tty_line_number> | begin Timeout",
-      "check_expected_output": "",
+      "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
       "set_command": "line tty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>"
     },
     "1.2.9": {
       "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line vty' (Automated)",
       "check_command": "sh line vty <tty_line_number> | begin Timeout",
-      "check_expected_output": "",
-      "set_command": "#line vty {line_number} [ending_line_number]\nexec-timeout <<span>timeout_in_minutes> <timeout_in_seconds</span>>"
+      "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
+      "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <<span>timeout_in_minutes> <timeout_in_seconds</span>>"
     },
     "1.2.10": {
       "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line vty' (Automated)",
       "check_command": "sh line vty <tty_line_number> | begin Timeout",
-      "check_expected_output": "",
+      "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
       "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <<span>timeout_in_minutes> <timeout_in_seconds</span>>"
     },
     "1.2.11": {
       "description": "Set 'transport input none' for 'line aux 0' (Automated)",
       "check_command": "sh line aux 0 | incl input transports",
-      "check_expected_output": "",
+      "check_expected_output": "*transport input none*",
       "set_command": "line aux 0\ntransport input none"
     },
     "1.3.1": {
       "description": "Set the 'banner-text' for 'banner exec' (Automated)",
       "check_command": "sh running-config | beg banner exec",
-      "check_expected_output": "",
-      "set_command": "banner exec"
+      "check_expected_output": "*<banner exec>*",
+      "set_command": "banner exec c\n<banner exec> c"
     },
     "1.3.2": {
       "description": "Set the 'banner-text' for 'banner login' (Automated)",
       "check_command": "show running-config | beg banner login",
-      "check_expected_output": "",
-      "set_command": "banner login c"
+      "check_expected_output": "*<banner login>*",
+      "set_command": "banner login c\n<banner login> c"
     },
     "1.3.3": {
       "description": "Set the 'banner-text' for 'banner motd' (Automated)",
       "check_command": "sh running-config | beg banner motd",
       "check_expected_output": "",
-      "set_command": "banner motd c"
+      "set_command": "banner motd c\n<banner motd> c"
     },
     "1.4.1": {
       "description": "Set 'password' for 'enable secret' (Automated)",
       "check_command": "sh run | incl enable secret",
-      "check_expected_output": "",
+      "check_expected_output": "enable secret*",
       "set_command": "enable secret {ENABLE_SECRET_PASSWORD}"
     },
     "1.4.2": {
       "description": "Enable 'service password-encryption' (Automated)",
       "check_command": "sh run | incl service password-encryption",
-      "check_expected_output": "",
+      "check_expected_output": "service password-encryption",
       "set_command": "service password-encryption"
     },
     "1.4.3": {
       "description": "Set 'username secret' for all local users (Automated)",
       "check_command": "show run | incl username",
-      "check_expected_output": "",
-      "set_command": "username {{em}LOCAL_USERNAME{/em}} secret {{em}LOCAL_PASSWORD{/em}}"
+      "check_expected_output": "*username * secret *",
+      "set_command": "username {LOCAL_USERNAME} secret {LOCAL_PASSWORD}"
     },
     "1.5.1": {
       "description": "Set 'no snmp-server' to disable SNMP when unused (Automated)",
       "check_command": "show snmp community",
-      "check_expected_output": "",
+      "check_expected_output": "*no snmp-server*",
       "set_command": "no snmp-server"
     },
     "1.5.2": {
       "description": "Unset 'private' for 'snmp-server community' (Automated)",
       "check_command": "show snmp community",
-      "check_expected_output": "",
-      "set_command": "no snmp-server community {private}"
+      "check_expected_output": "*no snmp-server community private*",
+      "set_command": "no snmp-server community private"
     },
     "1.5.3": {
       "description": "Unset 'public' for 'snmp-server community' (Automated)",
       "check_command": "show snmp community",
-      "check_expected_output": "",
-      "set_command": "no snmp-server community {public}"
+      "check_expected_output": "*no snmp-server community public*",
+      "set_command": "no snmp-server community public"
     },
     "1.5.4": {
       "description": "Do not set 'RW' for any 'snmp-server community' (Automated)",
       "check_command": "show run | incl snmp-server community",
-      "check_expected_output": "",
-      "set_command": "no snmp-server community {<em>write_community_string</em>}"
+      "check_expected_output": "*no snmp-server community {write_community_string}*",
+      "set_command": "no snmp-server community {write_community_string}"
     },
     "1.5.5": {
       "description": "Set the ACL for each 'snmp-server community' (Automated)",
       "check_command": "show run | incl snmp-server community",
-      "check_expected_output": "",
-      "set_command": "snmp-server community <<em>community_string</em>> ro {<em>snmp_access-list_number | <span>snmp_access-list_name</span></em><span>}</span>"
+      "check_expected_output": "*snmp-server community <community_string> ro {<snmp_access-list_number> | <snmp_access-list_name>}*",
+      "set_command": "snmp-server community <community_string> ro {<snmp_access-list_number> | <snmp_access-list_name>}"
     },
     "1.5.6": {
       "description": "Create an 'access-list' for use with SNMP (Automated)",
-      "check_command": "access-list <<em>snmp_acl_number</em>> permit <<em>snmp_access-list</em>>",
-      "check_expected_output": "",
-      "set_command": "access-list deny any log"
+      "check_command": "sh ip access-list <snmp_acl_number>",
+      "check_expected_output": "*permit <snmp_access-list>*,*access-list deny any log*",
+      "set_command": "access-list <snmp_acl_number> permit <snmp_access-list>\naccess-list deny any log"
     },
     "1.5.7": {
       "description": "Set 'snmp-server host' when using SNMP (Automated)",
       "check_command": "show run | incl snmp-server",
-      "check_expected_output": "",
+      "check_expected_output": "*snmp-server host*",
       "set_command": "snmp-server host {ip_address} {trap_community_string} {notification-type}"
     },
     "1.5.8": {
       "description": "Set 'snmp-server enable traps snmp' (Automated)",
       "check_command": "show run | incl snmp-server",
-      "check_expected_output": "",
+      "check_expected_output": "*snmp-server enable traps snmp authentication linkup linkdown coldstart*",
       "set_command": "snmp-server enable traps snmp authentication linkup linkdown coldstart"
     },
     "1.5.9": {
       "description": "Set 'priv' for each 'snmp-server group' using SNMPv3 (Automated)",
       "check_command": "show snmp group",
-      "check_expected_output": "",
-      "set_command": "snmp-server group {<em>group_name</em>} v3 priv"
+      "check_expected_output": "*snmp-server group {<group_name>} v3 priv*",
+      "set_command": "snmp-server group {<group_name>} v3 priv"
     },
     "1.5.10": {
       "description": "Require 'aes 128' as minimum for 'snmp-server user' when using SNMPv3 (Automated)",
-      "check_command": "",
-      "check_expected_output": "show snmp user",
+      "check_command": "show snmp user",
+      "check_expected_output": "*snmp-server user {user_name} {group_name} v3 auth sha {auth_password} priv aes 128 {priv_password} {acl_name_or_number}*",
       "set_command": "snmp-server user {user_name} {group_name} v3 auth sha {auth_password} priv aes 128 {priv_password} {acl_name_or_number}"
     },
     "2.1.1.1.1": {
       "description": "Set the 'hostname' (Automated)",
       "check_command": "sh run | incl hostname",
-      "check_expected_output": "",
-      "set_command": "hostname {<em>router_name</em>}"
+      "check_expected_output": "*hostname*",
+      "set_command": "hostname {<router_name>}"
     },
     "2.1.1.1.2": {
       "description": "Set the 'ip domain-name' (Automated)",
       "check_command": "sh run | incl domain-name",
-      "check_expected_output": "",
-      "set_command": "ip domain-name {<em>domain-name</em>}"
+      "check_expected_output": "*ip domain-name*",
+      "set_command": "ip domain-name {domain-name}"
     },
     "2.1.1.1.3": {
       "description": "Set 'modulus' to greater than or equal to 2048 for 'crypto key generate rsa' (Automated)",
       "check_command": "sh crypto key mypubkey rsa",
-      "check_expected_output": "",
-      "set_command": "crypto key generate rsa general-keys modulus <em>2048</em>"
+      "check_expected_output": "*Key type: RSA KEYS*",
+      "set_command": "crypto key generate rsa general-keys modulus 2048"
     },
     "2.1.1.1.4": {
       "description": "Set 'seconds' for 'ip ssh timeout' (Automated)",
       "check_command": "sh ip ssh",
       "check_expected_output": "",
-      "set_command": "ip ssh time-out [<em>60</em>]"
+      "set_command": "ip ssh time-out [<60>]"
     },
     "2.1.1.1.5": {
       "description": "Set maximimum value for 'ip ssh authentication-retries' (Automated)",
       "check_command": "sh ip ssh",
-      "check_expected_output": "",
-      "set_command": "ip ssh authentication-retries [<em>3</em>]"
+      "check_expected_output": "*Authentication retries: 3*",
+      "set_command": "ip ssh authentication-retries 3"
     },
     "2.1.1.2": {
       "description": "Set version 2 for 'ip ssh version' (Automated)",
       "check_command": "sh ip ssh",
-      "check_expected_output": "",
+      "check_expected_output": "*ip ssh version 2*",
       "set_command": "ip ssh version 2"
     },
     "2.1.2": {
       "description": "Set 'no cdp run' (Automated)",
       "check_command": "show cdp",
-      "check_expected_output": "",
+      "check_expected_output": "*CDP is not enabled*",
       "set_command": "no cdp run"
     },
     "2.1.3": {
       "description": "Set 'no ip bootp server' (Automated)",
       "check_command": "show run | incl bootp",
-      "check_expected_output": "",
+      "check_expected_output": "ip dhcp bootp ignore",
       "set_command": "ip dhcp bootp ignore"
     },
     "2.1.4": {
       "description": "Set 'no service dhcp' (Automated)",
       "check_command": "show run | incl dhcp",
-      "check_expected_output": "",
+      "check_expected_output": "*no service dhcp*",
       "set_command": "no service dhcp"
     },
     "2.1.5": {
       "description": "Set 'no ip identd' (Automated)",
       "check_command": "show run | incl identd",
-      "check_expected_output": "",
+      "check_expected_output": "*no ip identd*",
       "set_command": "no ip identd"
     },
     "2.1.6": {
       "description": "Set 'service tcp-keepalives-in' (Automated)",
       "check_command": "show run | incl service tcp",
-      "check_expected_output": "",
+      "check_expected_output": "*service tcp-keepalives-in*",
       "set_command": "service tcp-keepalives-in"
     },
     "2.1.7": {
       "description": "Set 'service tcp-keepalives-out' (Automated)",
       "check_command": "show run | incl service tcp",
-      "check_expected_output": "",
+      "check_expected_output": "*service tcp-keepalives-out*",
       "set_command": "service tcp-keepalives-out"
     },
     "2.1.8": {
       "description": "Set 'no service pad' (Automated)",
       "check_command": "show run | incl service pad",
-      "check_expected_output": "",
+      "check_expected_output": "no service pad",
       "set_command": "no service pad"
     },
     "2.2.1": {
       "description": "Set 'logging on' (Automated)",
-      "check_command": "show run | incl logging",
-      "check_expected_output": "",
-      "set_command": "logging enable"
+      "check_command": "show logging | include logging",
+      "check_expected_output": "*Syslog logging: enabled*",
+      "set_command": "loggin on"
     },
     "2.2.2": {
-      "description": "Set 'buffer size' for 'logging buffered' (Automated)",
+      "description": "Set 'buffer size' for 'logging buffered' (recommanded 64000)(Automated)",
       "check_command": "show run | incl logging buffered",
-      "check_expected_output": "",
-      "set_command": "logging buffered buffer-size"
+      "check_expected_output": "*logging buffered 64000*",
+      "set_command": "logging buffered 64000"
     },
     "2.2.3": {
       "description": "Set 'logging console critical' (Automated)",
       "check_command": "show run | incl logging console",
-      "check_expected_output": "",
+      "check_expected_output": "*logging console critical*",
       "set_command": "logging console critical"
     },
     "2.2.4": {
       "description": "Set IP address for 'logging host' (Automated)",
       "check_command": "sh log | incl logging host",
-      "check_expected_output": "",
+      "check_expected_output": "*logging host {syslog_server}*",
       "set_command": "logging host {syslog_server}"
     },
     "2.2.5": {
@@ -338,206 +338,188 @@
     "2.2.6": {
       "description": "Set 'service timestamps debug datetime' (Automated)",
       "check_command": "sh run | incl service timestamps",
-      "check_expected_output": "",
-      "set_command": "service timestamps debug datetime {msec} show- timezone"
+      "check_expected_output": "*service timestamps debug datetime msec show- timezone*",
+      "set_command": "service timestamps debug datetime msec show- timezone"
     },
     "2.2.7": {
       "description": "Set 'logging source interface' (Automated)",
       "check_command": "sh run | incl logging source",
-      "check_expected_output": "",
-      "set_command": "logging source-interface loopback {<em>loopback_interface_number</em>}"
+      "check_expected_output": "*logging source-interface*",
+      "set_command": "logging source-interface loopback {loopback_interface_number}"
     },
     "2.3.1.1": {
       "description": "Set 'ntp authenticate' (Automated)",
       "check_command": "show run | include ntp",
-      "check_expected_output": "",
+      "check_expected_output": "*ntp authenticate*",
       "set_command": "ntp authenticate"
     },
     "2.3.1.2": {
       "description": "Set 'ntp authentication-key' (Automated)",
       "check_command": "show run | include ntp authentication-key",
-      "check_expected_output": "",
+      "check_expected_output": "*ntp authentication-key*",
       "set_command": "ntp authentication-key {ntp_key_id} md5 {ntp_key_hash}"
     },
     "2.3.1.3": {
       "description": "Set the 'ntp trusted-key' (Automated)",
       "check_command": "show run | include ntp trusted-key",
-      "check_expected_output": "",
+      "check_expected_output": "*ntp trusted-key {ntp_key_id}*",
       "set_command": "ntp trusted-key {ntp_key_id}"
     },
     "2.3.1.4": {
       "description": "Set 'key' for each 'ntp server' (Automated)",
       "check_command": "show run | include ntp server",
-      "check_expected_output": "",
-      "set_command": "ntp server {<em>ntp-server_ip_address</em>}{key <em>ntp_key_id</em>}"
+      "check_expected_output": "*ntp server *",
+      "set_command": "ntp server {<ntp-server_ip_address>}{<ntp_key_id>}"
     },
     "2.3.2": {
       "description": "Set 'ip address' for 'ntp server' (Automated)",
       "check_command": "sh ntp associations",
-      "check_expected_output": "",
+      "check_expected_output": "*ntp server *",
       "set_command": "ntp server {ntp-server_ip_address}"
     },
     "2.4.1": {
       "description": "Create a single 'interface loopback' (Automated)",
       "check_command": "sh ip int brief | incl Loopback",
-      "check_expected_output": "",
-      "set_command": "interface loopback <<em>number</em>> hostname(config-if)#ip address <<em>loopback_ip_address</em>> <<em>loopback_subnet_mask</em>>"
+      "check_expected_output": "*loopback*",
+      "set_command": "interface loopback <number>\nip address <loopback_ip_address> <loopback_subnet_mask>"
     },
     "2.4.2": {
       "description": "Set AAA 'source-interface' (Automated)",
       "check_command": "sh run | incl tacacs source | radius source",
-      "check_expected_output": "",
-      "set_command": "ip source-interface"
+      "check_expected_output": "*ip radius source-interface loopback*",
+      "set_command": "ip radius source-interface loopback {loopback_interface_number}"
     },
     "2.4.3": {
       "description": "Set 'ntp source' to Loopback Interface (Automated)",
       "check_command": "sh run | incl ntp source",
-      "check_expected_output": "",
-      "set_command": "ntp source loopback {<em>loopback_interface_number}</em>"
+      "check_expected_output": "*ntp source loopback*",
+      "set_command": "ntp source loopback {loopback_interface_number}"
     },
     "2.4.4": {
       "description": "Set 'ip tftp source-interface' to the Loopback Interface (Automated)",
       "check_command": "sh run | incl tftp source-interface",
-      "check_expected_output": "",
-      "set_command": "ip tftp source-interface loopback {<em>loobpback_interface_number</em>}"
+      "check_expected_output": "*ip tftp source-interface loopback*",
+      "set_command": "ip tftp source-interface loopback {loobpback_interface_number}"
     },
     "3.1.1": {
       "description": "Set 'no ip source-route' (Automated)",
       "check_command": "sh run | incl ip source-route",
-      "check_expected_output": "",
+      "check_expected_output": "*no ip source-route*",
       "set_command": "no ip source-route"
     },
     "3.1.2": {
       "description": "Set 'no ip proxy-arp' (Manual)",
-      "check_command": "sh ip int {<em>interface</em>} | incl proxy-arp#sh ip int {<em>interface</em>} | incl proxy-arp",
-      "check_expected_output": "",
+      "check_command": "sh ip int {interface} | incl proxy-arp",
+      "check_expected_output": "*no ip proxy-arp*",
       "set_command": "interface {interface}\nno ip proxy-arp"
     },
     "3.1.3": {
       "description": "Set 'no interface tunnel' (Automated)",
       "check_command": "sh ip int brief | incl tunnel",
       "check_expected_output": "",
-      "set_command": "no interface tunnel {<em>instance</em>}"
+      "set_command": "no interface tunnel {instance}"
     },
     "3.1.4": {
       "description": "Set 'ip verify unicast source reachable-via' (Automated)",
-      "check_command": "sh ip int {<em>interface</em>} | incl verify source",
+      "check_command": "sh ip int {interface} | incl verify source",
       "check_expected_output": "",
-      "set_command": "interface {<em>interface_name</em>}\nip verify unicast source reachable-via rx"
+      "set_command": "interface {interface_name}\nip verify unicast source reachable-via rx"
     },
     "3.2.1": {
       "description": "Set 'ip access-list extended' to Forbid Private Source Addresses from External Networks (Manual)",
-      "check_command": "sh ip access-list {<em>name | number</em>}",
+      "check_command": "sh ip access-list {name | number}",
       "check_expected_output": "",
-      "set_command": "#ip access-list extended {<span><em>name | number</em>}\ndeny ip {</span><em>internal_networks</em>} any log\ndeny ip 127.0.0.0 0.255.255.255 any log\ndeny ip 10.0.0.0 0.255.255.255 any log\ndeny ip 0.0.0.0 0.255.255.255 any log\ndeny ip 172.16.0.0 0.15.255.255 any log\ndeny ip 192.168.0.0 0.0.255.255 any log\ndeny ip 192.0.2.0 0.0.0.255 any log\ndeny ip 169.254.0.0 0.0.255.255 any log\ndeny ip 224.0.0.0 31.255.255.255 any log\ndeny ip host 255.255.255.255 any log\npermit {protocol} {source_ip} {source_mask} {destination} {destination_mask} log\ndeny any any log\ninterface <external_<em>interface</em>>\naccess-group <<em>access-list</em>> in"
+      "set_command": "#ip access-list extended {<span>name | number}\ndeny ip {</span>internal_networks} any log\ndeny ip 127.0.0.0 0.255.255.255 any log\ndeny ip 10.0.0.0 0.255.255.255 any log\ndeny ip 0.0.0.0 0.255.255.255 any log\ndeny ip 172.16.0.0 0.15.255.255 any log\ndeny ip 192.168.0.0 0.0.255.255 any log\ndeny ip 192.0.2.0 0.0.0.255 any log\ndeny ip 169.254.0.0 0.0.255.255 any log\ndeny ip 224.0.0.0 31.255.255.255 any log\ndeny ip host 255.255.255.255 any log\npermit {protocol} {source_ip} {source_mask} {destination} {destination_mask} log\ndeny any any log\ninterface <external_interface>\naccess-group <access-list> in"
     },
     "3.2.2": {
       "description": "Set inbound 'ip access-group' on the External Interface (Manual)",
-      "check_command": "sh run | sec interface {<em>external_interface</em>}",
+      "check_command": "sh run | sec interface {external_interface}",
       "check_expected_output": "",
       "set_command": "interface {external_interface}\nip access-group {name | number} in"
     },
     "3.3.1.1": {
       "description": "Set 'key chain' (Automated)",
       "check_command": "sh run | sec key chain",
-      "check_expected_output": "",
-      "set_command": "key chain {<em>key-chain_name</em>}"
+      "check_expected_output": "*Key chain <key-chain_name>*",
+      "set_command": "key chain {<key-chain_name>}"
     },
     "3.3.1.2": {
       "description": "Set 'key' (Automated)",
       "check_command": "sh run | sec key chain",
-      "check_expected_output": "",
-      "set_command": "key chain {name}\nkey {<em>key-number</em>}"
+      "check_expected_output": "*key chain {name}*key {key-number}*",
+      "set_command": "key chain {name}\nkey {key-number}"
     },
     "3.3.1.3": {
       "description": "Set 'key-string' (Automated)",
       "check_command": "sh run | sec key chain",
-      "check_expected_output": "",
-      "set_command": "key chain {name}\nkey {number}\nkey-string <<em>key-string</em>>"
+      "check_expected_output": "*key-string <key-string>*",
+      "set_command": "key chain {name}\nkey {number}\nkey-string <key-string>"
     },
     "3.3.1.4": {
       "description": "Set 'address-family ipv4 autonomous-system' (Automated)",
       "check_command": "sh run | sec router eigrp",
       "check_expected_output": "",
-      "set_command": "router eigrp <<em>virtual-instance-name</em>>\naddress-family ipv4 autonomous-system {<em>eigrp_as- number</em>}"
+      "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}"
     },
     "3.3.1.5": {
       "description": "Set 'af-interface default' (Automated)",
       "check_command": "sh run | sec router eigrp",
-      "check_expected_output": "",
-      "set_command": "router eigrp <<em>virtual-instance-name</em>>\naddress-family ipv4 autonomous-system {<em>eigrp_as- number</em>}\naf-interface default"
+      "check_expected_output": "*router eigrp <virtual-instance-name>*address-family ipv4 autonomous-system*",
+      "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface default"
     },
     "3.3.1.6": {
       "description": "Set 'authentication key-chain' (Automated)",
       "check_command": "sh run | sec router eigrp",
-      "check_expected_output": "",
+      "check_expected_output": "*authentication key-chain*",
       "set_command": "router eigrp <virtual-instance-name>\nddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication key-chain {eigrp_key- chain_name}"
     },
     "3.3.1.7": {
       "description": "Set 'authentication mode md5' (Automated)",
       "check_command": "sh run | sec router eigrp",
-      "check_expected_output": "",
+      "check_expected_output": "*authentication mode md5*",
       "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication mode md5"
-    },
-    "3.3.1.8": {
-      "description": "Set 'ip authentication key-chain eigrp' (Automated)",
-      "check_command": "sh ip eigrp int\nsh run int {<em>interface_name</em>} | incl key-chain",
-      "check_expected_output": "",
-      "set_command": "interface {<em>interface_name</em>}\nip authentication key-chain eigrp {<em>eigrp_as- number</em>} {<em>eigrp_key-chain_name</em>}"
-    },
-    "3.3.1.9": {
-      "description": "Set 'ip authentication mode eigrp' (Automated)",
-      "check_command": "sh ip eigrp int\nsh run int {<em>interface_name</em>} | incl authentication mode",
-      "check_expected_output": "",
-      "set_command": "interface {<em>interface_name</em>}\nip authentication mode eigrp {<em><span>eigrp_as- number</span></em><span>}</span> md5"
     },
     "3.3.2.1": {
       "description": "Set 'authentication message-digest' for OSPF area (Automated)",
       "check_command": "sh run | sec router ospf",
-      "check_expected_output": "",
-      "set_command": "router ospf <<em>ospf_process-id</em>>\narea <<em>ospf_area-id</em>> authentication message- digest"
+      "check_expected_output": "*area <ospf_area-id> authentication message- digest*",
+      "set_command": "router ospf <ospf_process-id>\narea <ospf_area-id> authentication message-digest"
     },
     "3.3.2.2": {
       "description": "Set 'ip ospf message-digest-key md5' (Automated)",
-      "check_command": "sh run int {<em>interface</em>}",
-      "check_expected_output": "",
-      "set_command": "interface {<em>interface_name</em>}\nip ospf message-digest-key {<em>ospf_md5_key-id</em>} md5 {<em>ospf_md5_key</em>}"
+      "check_command": "sh run int {interface}",
+      "check_expected_output": "*ip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}*",
+      "set_command": "interface {interface_name}\nip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}"
     },
     "3.3.3.1": {
       "description": "Set 'key chain' (Automated)",
       "check_command": "sh run | sec key chain",
-      "check_expected_output": "",
-      "set_command": "key chain {<em>rip_key-chain_name</em>}"
+      "check_expected_output": "*Key chain <rip_key-chain_name>*",
+      "set_command": "key chain {rip_key-chain_name}"
     },
     "3.3.3.2": {
       "description": "Set 'key' (Automated)",
       "check_command": "sh run | sec key chain",
-      "check_expected_output": "",
-      "set_command": "key {<em>key-number</em>}"
+      "check_expected_output": "*key chain {name}*key {key-number}*",
+      "set_command": "key chain {name}\nkey {key-number}"
     },
     "3.3.3.3": {
       "description": "Set 'key-string' (Automated)",
       "check_command": "sh run | sec key chain",
-      "check_expected_output": "",
-      "set_command": "key-string <<em>key-string</em>>"
+      "check_expected_output": "*key-string <key-string>*",
+      "set_command": "key-string <key-string>"
     },
     "3.3.3.4": {
       "description": "Set 'interface' for RIPv2 (Automated)",
-      "check_command": "sh run int {<em>interface_name</em>}",
-      "check_expected_output": "",
-      "set_command": "interface {<em>interface_name</em>}\nip rip authentication key-chain {<em>rip_key- chain_name</em>}"
+      "check_command": "sh run int {interface_name}",
+      "check_expected_output": "*authentication key-chain*",
+      "set_command": "interface {interface_name}\nip rip authentication key-chain {rip_key- chain_name}"
     },
     "3.3.3.5": {
       "description": "Set 'authentication mode md5' for RIPv2 (Automated)",
-      "check_command": "sh run int <<em>interface</em>>",
-      "check_expected_output": "",
-      "set_command": "interface <<em>interface_name</em>>\nip rip authentication mode md5"
-    },
-    "3.3.4.1": {
-      "description": "Set 'password' (Automated)",
-      "check_command": "sh run | sec router bgp",
-      "check_expected_output": "",
-      "set_command": "router bgp <<em>bgp_as-number</em>>\nneighbor <<em>bgp_neighbor-ip</em> | <em>peer-group- name</em>> password <<em>password</em>>"
+      "check_command": "sh run int <interface>",
+      "check_expected_output": "*ip rip authentication mode md5*",
+      "set_command": "interface <interface_name>\nip rip authentication mode md5"
     }
   }
   
