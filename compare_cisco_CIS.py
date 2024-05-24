@@ -67,11 +67,12 @@ def compare_output(output, expected_output):
 def select_points(recommendations):
     def traverse(node, path=""):
         points = {}
-        if 'description' in node:
-            points[path] = node['description']
+        if 'description' in node and list(node.keys()) == ["description"]:
+            points[path.strip(".")] = node['description']
         for key, value in node.items():
             if isinstance(value, dict):
                 points.update(traverse(value, path + key + "."))
+                print(points)
         return points
 
     all_points = traverse(recommendations)
