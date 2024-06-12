@@ -421,7 +421,7 @@
         "description": "Create a single 'interface loopback' (Automated)",
         "check_command": "sh ip int brief | incl Loopback",
         "check_expected_output": "*loopback*",
-        "set_command": "interface loopback <number>\nip address <loopback_ip_address> <loopback_subnet_mask>"
+        "set_command": "interface loopback {number}\nip address {loopback_ip_address} {loopback_subnet_mask}"
       },
       "2.4.2": {
         "description": "Set AAA 'source-interface' (Automated)",
@@ -573,4 +573,3 @@
     }
   }
 }
-  

@@ -30,11 +30,11 @@ class SSH:
             self.connection.enable()
             return "réussi"
         except NetmikoAuthenticationException:
-            print(f"Échec de l'authentification pour l'appareil {self.creds['ip']}.")
+            raise NetmikoAuthenticationException(f"Échec de l'authentification pour l'appareil {self.creds['ip']}.")
         except NetmikoTimeoutException:
-            print(f"L'appareil {self.creds['ip']} n'est pas accessible via SSH.")
+            raise NetmikoTimeoutException(f"L'appareil {self.creds['ip']} n'est pas accessible via SSH.")
         except Exception as e:
-            print(f"Erreur lors de la connexion à l'appareil {self.creds['ip']}: {e}")
+            raise Exception(f"Erreur lors de la connexion à l'appareil {self.creds['ip']}: {e}")
 
 
     def close(self):

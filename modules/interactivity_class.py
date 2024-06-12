@@ -24,7 +24,7 @@ class Selection:
                     result.append(f'[{item}] {data[item]["description"]}')
         else:
             for item in data:
-                result.append(f'[{item}] {data[item]["IP"]}')
+                result.append(f'[{item}] {data[item]["ip"]}')
         return result
     
     def make_selection(self, data: dict):
@@ -33,7 +33,6 @@ class Selection:
             message="Choix",
             choices=self.construct_options(data=data)
         )
-    
     def points(self, result: list):
         tab = []
         for choice in result[self.label]:
