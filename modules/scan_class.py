@@ -7,7 +7,7 @@ from fuzzywuzzy import fuzz
 class CiscoScanner:
     def __init__(self, community: str = 'public'):
         self.community = community
-        self.cisco_versions = []
+        self.cisco_versions = self.load_cisco_versions(filename="ressources/cisco_versions.csv")
 
     def scan_network(self, network: str):
         nm = PortScanner()
@@ -24,12 +24,12 @@ class CiscoScanner:
             return match.group(1)
         return None
 
-    def get_device_model_and_ios_version(self):
+    def get_device_model_and_ios_version(self, ip: str):
         try:
             errorIndication, errorStatus, errorIndex, varBinds = next(
                 getCmd(SnmpEngine(),
                        CommunityData(self.community),
-                       UdpTransportTarget((self.ip, 161)),
+                       UdpTransportTarget((ip, 161)),
                        ContextData(),
                        ObjectType(ObjectIdentity('SNMPv2-MIB', 'sysDescr', 0)))
             )
@@ -39,15 +39,15 @@ class CiscoScanner:
                 return None, None, None
 
             model = varBinds[0][1].prettyPrint()
-            device_type = self.get_device_type(model)
+            device_type = self.get_device_type(model=model)
             ios_version = None
             match = search(r'Version (\d+\.\d+)', model)
             if match:
                 ios_version = f"Cisco {device_type} {match.group(1)}"
 
-            return model, ios_version, device_type if device_type else "Unknown"
+            return ios_version
         except Exception as e:
-            print(f"Error while querying {self.ip}: {e}")
+            print(f"Error while querying {ip}: {e}")
             return None, None, None
 
     def load_cisco_versions(self, filename):

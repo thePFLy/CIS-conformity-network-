@@ -2,12 +2,5 @@
     "networks_ip": [
         "10.10.10.0/24"
     ],
-    "devices": {
-        "SW1": {
-            "username": "admin",
-            "ip": "10.10.10.1",
-            "port": "22",
-            "version": ""
-        }
-    }
+    "devices": {}
 }

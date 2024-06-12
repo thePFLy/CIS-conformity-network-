@@ -15,7 +15,7 @@ class SSH:
             "password": password,
             "secret": secret,
             "device_type": f"cisco_ios",
-            "session_log": "log.txt"
+            "session_log": "ssh_log.txt"
         }
         self.version = version
 

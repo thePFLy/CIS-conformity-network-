@@ -33,7 +33,9 @@ class SecretEnv:
                 output += f"{value}_PWD={model[value]['PWD']}\n"
                 output += f"{value}_SEC={model[value]['SEC']}\n"
         with open(file=self.file, mode='w', encoding="utf-8") as env:
-            env.write(output)
+            env.write(output.strip())
+        self.content = self.make_dict()
+
     
     def delete_device(self, device: str):
         del self.content[device]

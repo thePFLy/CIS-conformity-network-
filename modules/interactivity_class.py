@@ -58,8 +58,8 @@ class Selection:
         while queue:
             label, data = queue.popleft()  # Unpack the tuple to get the label and the dictionary
 
-            # Si le dictionnaire contient des options sélectionnables
-            if any("description" in data[item] and not "set_command" in data[item] for item in data if item != "description"):
+            # Vérifiez si data[item] est un dictionnaire avant de faire des opérations de type dictionnaire
+            if any(isinstance(data[item], dict) and "description" in data[item] and "set_command" not in data[item] for item in data if item != "description"):
                 selected_indices = self.question(data)
             else:
                 selected_indices = []
@@ -68,7 +68,6 @@ class Selection:
                 if index in data and isinstance(data[index], dict):
                     queue.append((index, data[index]))
 
-    
     def numeric_sort_key(self, value):
         parts = split(r'\.', value)
         return [int(part) for part in parts]

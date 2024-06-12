@@ -477,8 +477,9 @@
     },
     "3.3": {
       "description": "Neighbor Authentication",
-      "*3.3.1": {
+      "3.3.1": {
         "description": "Require EIGRP Authentication if Protocol is Used",
+        "required": true,
         "3.3.1.1": {
           "description": "Set 'key chain' (Automated)",
           "check_command": "sh run | sec key chain",
@@ -522,8 +523,9 @@
           "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication mode md5"
         }
       },
-      "*3.3.2": {
+      "3.3.2": {
         "description": "Require OSPF Authentication if Protocol is Used",
+        "required": true,
         "3.3.2.1": {
           "description": "Set 'authentication message-digest' for OSPF area (Automated)",
           "check_command": "sh run | sec router ospf",
@@ -537,8 +539,9 @@
           "set_command": "interface {interface_name}\nip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}"
         }
       },
-      "*3.3.3": {
+      "3.3.3": {
         "description": "Require RIPv2 Authentication if Protocol is Used",
+        "required": true,
         "3.3.3.1": {
           "description": "Set 'key chain' (Automated)",
           "check_command": "sh run | sec key chain",

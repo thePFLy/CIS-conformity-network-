@@ -17,6 +17,7 @@ class JsonData:
     def set(self, new_dict: dict) -> None:
         with open(file=self.file, mode="w", encoding="utf-8") as json:
             json.write(dumps(new_dict, indent=4))
+        self.content = self.read_json()
 
     def device_exist(self, ip: str):
         for hostname in self.content["devices"]:
@@ -24,11 +25,12 @@ class JsonData:
                 return True
         return False
     
+    def get_hostname(self, ip: str):
+        for hostname in self.content["devices"]:
+            if ip in self.content["devices"][hostname]["ip"]:
+                return hostname
+    
     def delete_device(self, key: str):
-        if key is None:
-            raise KeyError(f"Vous devez donner une valeur à --device !")
         if key in self.content["devices"]:
             del self.content["devices"][key]
             self.set(new_dict=self.content)
-        else:
-            raise KeyError(f"Le device {key} n'existe pas")

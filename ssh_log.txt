@@ -1,0 +1,72 @@
+
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************
+S1>
+S1>terminal width 511
+S1>terminal length 0
+S1>
+S1>
+S1>enable
+Password: 
+S1#
+S1#
+S1#show running-config | incl aaa new-model
+no aaa new-model
+S1#
+S1#show run | incl aaa authentication login
+S1#
+S1#show running-config | incl aaa authentication enable
+S1#
+S1#sh run | sec line | incl login authentication
+line con 0
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+S1#
+S1#sh run | sec line | incl login authentication
+line con 0
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+S1#
+S1#sh run | sec line | incl login authentication
+line con 0
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+line vty 5 15
+ login local
+ transport input ssh
+S1#
+S1#sh run | incl aaa accounting commands
+S1#
+S1#sh run | incl aaa accounting connection
+S1#
+S1#sh run | incl aaa accounting exec
+S1#
+S1#sh run | incl aaa accounting network
+S1#
+S1#sh run | incl aaa accounting system
+S1#
+S1#sh run | sec router ospf
+S1#
+S1#sh run int {interface}
+              ^
+% Invalid input detected at '^' marker.
+
+S1#
