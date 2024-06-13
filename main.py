@@ -152,7 +152,7 @@ if __name__ == "__main__":
         for network_address in json.content["networks_ip"]:
             print(
                 title="Scan...",
-                content=f"Scan du réseau {network_address} en cours...\nVeuillez patienter avant de choisir les IP a tester !",
+                content=f"Scan du réseau {network_address} en cours...\nVeuillez patienter avant de choisir les IP a tester.",
                 clear=True
             )
             finded_devices.append(
@@ -200,7 +200,7 @@ if __name__ == "__main__":
     if len(json.read_json()["devices"]) == 0:
         print(
             title="Aucun appareil à tester !",
-            content="Il n'y aucun appareil que vous n'ayez reglé\nUtilisez -s ou --scan pour en encoder des nouveaux !",
+            content="Il n'y aucun appareil que vous n'ayez reglé\nUtilisez -s ou --scan pour en encoder des nouveaux.",
             color="red",
             clear=True
             )
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     # Pour récuperer les choix, utiliser <variable>.results (et <variable>.results["resultats"] pour obtenir directement la liste)
     print(
         title=f"Choix des appareils",
-        content=f"Veuillez choisir quels appareils vous souhaitez tester !",
+        content=f"Veuillez choisir quels appareils vous souhaitez tester.",
         clear=True
     )
     device_select = Selection(data=json.read_json()["devices"], label="choix_device", device_selection=True)
@@ -219,7 +219,7 @@ if __name__ == "__main__":
     for device in device_select.results["resultats"]:
         print(
             title=f"Choix de score pour {device}",
-            content=f"Veuillez choisir quel points vous souhaitez tester !",
+            content=f"Veuillez choisir quel points vous souhaitez tester.",
             clear=True
         )
         rec = Selection(
