@@ -7,7 +7,7 @@ class SSH:
     La classe SSH permet d'instancier une connexion SSH, de s'y connecter
     et d'y exécuter des commandes !
     """
-    def __init__(self, ip: str, username: str, password: str, version: str = None, port: int=22, secret: str = None):
+    def __init__(self, ip: str, username: str, password: str, port: int=22, secret: str = None):
         self.creds = {
             "ip": ip,
             "port": int(port),
@@ -17,8 +17,6 @@ class SSH:
             "device_type": f"cisco_ios",
             "session_log": "ssh_log.txt"
         }
-        self.version = version
-
 
     def connect_to_ssh(self):
         """

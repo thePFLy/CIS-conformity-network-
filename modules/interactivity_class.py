@@ -24,19 +24,28 @@ class Selection:
                     result.append(f'[{item}] {data[item]["description"]}')
         else:
             for item in data:
-                result.append(f'[{item}] {data[item]["ip"]}')
+                if ":vars" not in item:
+                    for device in data[item]:
+                        result.append(f'[{item}] > {data[item][device]}')
         return result
     
     def make_selection(self, data: dict):
         return Checkbox(
             self.label,
-            message="Choix",
+            message="Effectuez votre choix:",
             choices=self.construct_options(data=data)
         )
     def points(self, result: list):
         tab = []
         for choice in result[self.label]:
-            tab.append(str(choice).split("]")[0][1:].strip())
+            if self.is_device:
+                device_type, ip = (choice.split(">"))
+                tab.append({
+                    "device_type": device_type.strip()[1:-1],
+                    "ip": ip.strip()
+                })
+            else:
+                tab.append(choice.split("[")[1].split("]")[0])
         return tab
     
     def question(self, data: dict):

@@ -2,7 +2,7 @@ from json import load
 
 
 class Recommendation:
-    def __init__(self, filename: str = "ressources/recommendations.json") -> None:
+    def __init__(self, filename: str = "Cisco IOS 15") -> None:
         self.filename = f"ressources/{filename}.json"
 
     def read_file(self):
