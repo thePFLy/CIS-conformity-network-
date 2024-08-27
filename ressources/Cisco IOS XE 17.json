@@ -1,0 +1,668 @@
+{
+    "1": {
+      "description": "Management Plane",
+      "1.1": {
+        "description": "Local Authentication, Authorization and Accounting (AAA) Rules",
+        "1.1.1": {
+          "description": "Enable 'aaa new-model' (Automated)",
+          "check_command": "show running-config | incl aaa new-model",
+          "check_expected_output": "aaa new-model",
+          "set_command": "aaa new-model",
+          "level": 1
+        },
+        "1.1.2": {
+          "description": "Enable 'aaa authentication login' (Automated)",
+          "check_command": "show running-config | incl aaa authentication login",
+          "check_expected_output": "aaa authentication login",
+          "set_command": "aaa authentication login {default | aaa_list_name} [passwd-expiry] [method1] [method2]",
+          "level": 1
+        },
+        "1.1.3": {
+          "description": "Enable 'aaa authentication enable default' (Automated)",
+          "check_command": "show running-config | incl aaa authentication enable",
+          "check_expected_output": "aaa authentication enable default",
+          "set_command": "aaa authentication enable default {method1} enable",
+          "level": 1
+        },
+        "1.1.4": {
+          "description": "Set 'login authentication for 'line vty' (Automated)",
+          "check_command": "show running-config | sec line | incl login authentication",
+          "check_expected_output": "*login authentication*",
+          "set_command": "line vty {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}",
+          "level": 1
+        },
+        "1.1.5": {
+          "description": "Set 'login authentication for 'ip http' (Automated)",
+          "check_command": "show running-config | incl ip http authentication",
+          "check_expected_output": "*ip http authentication*",
+          "set_command": "ip http secure-server\nip http authentication {default | aaa_list_name}",
+          "level": 1
+        },
+        "1.1.6": {
+          "description": "Set 'aaa accounting' to log all privileged use commands using 'commands 15' (Automated)",
+          "check_command": "show running-config | incl aaa accounting commands",
+          "check_expected_output": "aaa accounting commands 15",
+          "set_command": "aaa accounting commands 15 {default | list-name | guarantee-first} {start-stop | stop-only | none} {radius | group group-name}",
+          "level": 2
+        },
+        "1.1.7": {
+          "description": "Set 'aaa accounting connection' (Automated)",
+          "check_command": "show running-config | incl aaa accounting connection",
+          "check_expected_output": "aaa accounting connection",
+          "set_command": "aaa accounting connection {default | list-name | guarantee-first} {start-stop | stop-only | none} {radius | group group-name}",
+          "level": 2
+        },
+        "1.1.8": {
+          "description": "Set 'aaa accounting exec' (Automated)",
+          "check_command": "show running-config | incl aaa accounting exec",
+          "check_expected_output": "aaa accounting exec",
+          "set_command": "aaa accounting exec {default | list-name | guarantee-first} {start-stop | stop-only | none} {radius | group group-name}",
+          "level": 2
+        },
+        "1.1.9": {
+          "description": "Set 'aaa accounting network' (Automated)",
+          "check_command": "show running-config | incl aaa accounting network",
+          "check_expected_output": "aaa accounting network",
+          "set_command": "aaa accounting network {default | list-name | guarantee-first} {start-stop | stop-only | none} {radius | group group-name}",
+          "level": 2
+        },
+        "1.1.10": {
+          "description": "Set 'aaa accounting system' (Automated)",
+          "check_command": "show running-config | incl aaa accounting system",
+          "check_expected_output": "aaa accounting system",
+          "set_command": "aaa accounting system {default | list-name | guarantee-first} {start-stop | stop-only | none} {radius | group group-name}",
+          "level": 2
+        }
+      },
+      "1.2": {
+        "description": "Access Rules",
+        "1.2.1": {
+          "description": "Set 'privilege 1' for local users (Automated)",
+          "check_command": "show running-config | incl privilege",
+          "check_expected_output": "privilege 1",
+          "set_command": "username <LOCAL_USERNAME> privilege 1",
+          "level": 1
+        },
+        "1.2.2": {
+          "description": "Set 'transport input ssh' for 'line vty' connections (Automated)",
+          "check_command": "show running-config | sec vty",
+          "check_expected_output": "transport input ssh",
+          "set_command": "line vty <line-number> <ending-line-number>\ntransport input ssh",
+          "level": 1
+        },
+        "1.2.3": {
+          "description": "Set 'no exec' for 'line aux 0' (Automated)",
+          "check_command": "show running-config | sec aux",
+          "check_expected_output": "no exec",
+          "set_command": "line aux 0\nno exec",
+          "level": 1
+        },
+        "1.2.4": {
+          "description": "Create 'access-list' for use with 'line vty' (Automated)",
+          "check_command": "show ip access-list <vty_acl_number>",
+          "check_expected_output": "appropriate access-list definitions",
+          "set_command": "access-list <vty_acl_number> permit tcp <vty_acl_block_with_mask> any\naccess-list <vty_acl_number> permit tcp host <vty_acl_host> any\ndeny ip any any log",
+          "level": 1
+        },
+        "1.2.5": {
+          "description": "Set 'access-class' for 'line vty' (Automated)",
+          "check_command": "show running-config | sec vty <line-number> <ending-line-number>",
+          "check_expected_output": "access-class <vty_acl_number> in",
+          "set_command": "line vty <line-number> <ending-line-number>\naccess-class <vty_acl_number> in",
+          "level": 1
+        },
+        "1.2.6": {
+          "description": "Set 'exec-timeout' to less than or equal to 10 minutes for 'line aux 0' (Automated)",
+          "check_command": "show running-config | sec line aux 0",
+          "check_expected_output": "exec-timeout",
+          "set_command": "line aux 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+          "level": 1
+        },
+        "1.2.7": {
+          "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line console 0' (Automated)",
+          "check_command": "show running-config | sec line con 0",
+          "check_expected_output": "exec-timeout",
+          "set_command": "line con 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+          "level": 1
+        },
+        "1.2.8": {
+          "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line vty' (Automated)",
+          "check_command": "show running-config | sec line vty <line_number>",
+          "check_expected_output": "exec-timeout",
+          "set_command": "line vty <line_number> <ending_line_number>\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+          "level": 1
+        },
+        "1.2.9": {
+          "description": "Set 'transport input none' for 'line aux 0' (Automated)",
+          "check_command": "show running-config | sec aux",
+          "check_expected_output": "transport input none",
+          "set_command": "line aux 0\ntransport input none",
+          "level": 1
+        },
+        "1.2.10": {
+          "description": "Set 'http Secure-server' limit (Automated)",
+          "check_command": "show running-config | inc ip http secure-server",
+          "check_expected_output": "ip http secure-server",
+          "set_command": "ip http max-connections 2",
+          "level": 1
+        },
+        "1.2.11": {
+          "description": "Set 'exec-timeout' to less than or equal to 10 min on 'ip http' (Automated)",
+          "check_command": "show running-config | beg ip http timeout-policy",
+          "check_expected_output": "ip http timeout-policy idle 600",
+          "set_command": "ip http timeout-policy idle 600 life {nnnn} requests {nn}",
+          "level": 1
+        }
+      },
+      "1.3": {
+        "description": "Banner Rules",
+        "1.3.1": {
+          "description": "Set the 'banner-text' for 'banner exec' (Automated)",
+          "check_command": "show running-config | sec banner exec",
+          "check_expected_output": "banner exec",
+          "set_command": "banner exec ^C<your banner text here>^C",
+          "level": 1
+        },
+        "1.3.2": {
+          "description": "Set the 'banner-text' for 'banner login' (Automated)",
+          "check_command": "show running-config | sec banner login",
+          "check_expected_output": "banner login",
+          "set_command": "banner login ^C<your banner text here>^C",
+          "level": 1
+        },
+        "1.3.3": {
+          "description": "Set the 'banner-text' for 'banner motd' (Automated)",
+          "check_command": "show running-config | sec banner motd",
+          "check_expected_output": "banner motd",
+          "set_command": "banner motd ^C<your banner text here>^C",
+          "level": 1
+        },
+        "1.3.4": {
+          "description": "Set the 'banner-text' for 'webauth banner' (Automated)",
+          "check_command": "show running-config | sec webauth banner",
+          "check_expected_output": "webauth banner",
+          "set_command": "webauth banner ^C<your banner text here>^C",
+          "level": 1
+        }
+      },
+      "1.4": {
+        "description": "Password Rules",
+        "1.4.1": {
+          "description": "Set 'password' for 'enable secret' (Automated)",
+          "check_command": "show running-config | incl enable secret",
+          "check_expected_output": "enable secret",
+          "set_command": "enable secret <password>",
+          "level": 1
+        },
+        "1.4.2": {
+          "description": "Enable 'service password-encryption' (Automated)",
+          "check_command": "show running-config | incl service password-encryption",
+          "check_expected_output": "service password-encryption",
+          "set_command": "service password-encryption",
+          "level": 1
+        },
+        "1.4.3": {
+          "description": "Set 'username secret' for all local users (Automated)",
+          "check_command": "show running-config | incl username",
+          "check_expected_output": "username <user> secret",
+          "set_command": "username <user> secret <password>",
+          "level": 1
+        }
+      },
+      "1.5": {
+        "description": "SNMP Rules",
+        "1.5.1": {
+          "description": "Set 'no snmp-server' to disable SNMP when unused (Automated)",
+          "check_command": "show running-config | incl snmp-server",
+          "check_expected_output": "no snmp-server",
+          "set_command": "no snmp-server",
+          "level": 1
+        },
+        "1.5.2": {
+          "description": "Unset 'private' for 'snmp-server community' (Automated)",
+          "check_command": "show running-config | incl snmp-server community private",
+          "check_expected_output": "no snmp-server community private",
+          "set_command": "no snmp-server community private",
+          "level": 1
+        },
+        "1.5.3": {
+          "description": "Unset 'public' for 'snmp-server community' (Automated)",
+          "check_command": "show running-config | incl snmp-server community public",
+          "check_expected_output": "no snmp-server community public",
+          "set_command": "no snmp-server community public",
+          "level": 1
+        },
+        "1.5.4": {
+          "description": "Do not set 'RW' for any 'snmp-server community' (Automated)",
+          "check_command": "show running-config | incl snmp-server community",
+          "check_expected_output": "no RW for snmp-server community",
+          "set_command": "snmp-server community <community-string> RO <access-list>",
+          "level": 1
+        },
+        "1.5.5": {
+          "description": "Set the ACL for each 'snmp-server community' (Automated)",
+          "check_command": "show running-config | incl snmp-server community",
+          "check_expected_output": "snmp-server community <community-string> RO <access-list>",
+          "set_command": "snmp-server community <community-string> RO <access-list>",
+          "level": 1
+        },
+        "1.5.6": {
+          "description": "Create an 'access-list' for use with SNMP (Automated)",
+          "check_command": "show ip access-list",
+          "check_expected_output": "access-list entries",
+          "set_command": "access-list <number> permit <source> <source-wildcard>",
+          "level": 1
+        },
+        "1.5.7": {
+          "description": "Set 'snmp-server host' when using SNMP (Automated)",
+          "check_command": "show running-config | incl snmp-server host",
+          "check_expected_output": "snmp-server host <ip-address> <community-string>",
+          "set_command": "snmp-server host <ip-address> <community-string>",
+          "level": 1
+        },
+        "1.5.8": {
+          "description": "Set 'snmp-server enable traps snmp' (Automated)",
+          "check_command": "show running-config | incl snmp-server enable traps snmp",
+          "check_expected_output": "snmp-server enable traps snmp",
+          "set_command": "snmp-server enable traps snmp",
+          "level": 1
+        },
+        "1.5.9": {
+          "description": "Set 'priv' for each 'snmp-server group' using SNMPv3 (Automated)",
+          "check_command": "show running-config | incl snmp-server group",
+          "check_expected_output": "snmp-server group <group-name> v3 priv",
+          "set_command": "snmp-server group <group-name> v3 priv",
+          "level": 1
+        },
+        "1.5.10": {
+          "description": "Require 'aes 128' as minimum for 'snmp-server user' when using SNMPv3 (Automated)",
+          "check_command": "show running-config | incl snmp-server user",
+          "check_expected_output": "snmp-server user <username> <group-name> v3 auth priv aes 128",
+          "set_command": "snmp-server user <username> <group-name> v3 auth priv aes 128",
+          "level": 1
+        }
+      }
+    },
+    "2": {
+      "description": "Control Plane",
+      "2.1": {
+        "description": "Global Service Rules",
+        "2.1.1": {
+          "description": "Setup SSH",
+          "2.1.1.1": {
+            "description": "Configure Prerequisites for the SSH Service",
+            "2.1.1.1.1": {
+              "description": "Set the 'hostname' (Automated)",
+              "check_command": "show running-config | incl hostname",
+              "check_expected_output": "hostname <router_name>",
+              "set_command": "hostname <router_name>",
+              "level": 1
+            },
+            "2.1.1.1.2": {
+              "description": "Set the 'ip domain-name' (Automated)",
+              "check_command": "show running-config | incl ip domain-name",
+              "check_expected_output": "ip domain-name <domain>",
+              "set_command": "ip domain-name <domain>",
+              "level": 1
+            },
+            "2.1.1.1.3": {
+              "description": "Set 'modulus' to greater than or equal to 2048 for 'crypto key generate rsa' (Automated)",
+              "check_command": "show crypto key mypubkey rsa",
+              "check_expected_output": "modulus >= 2048",
+              "set_command": "crypto key generate rsa modulus 2048",
+              "level": 1
+            },
+            "2.1.1.1.4": {
+              "description": "Set 'seconds' for 'ip ssh timeout' for 60 seconds or less (Automated)",
+              "check_command": "show running-config | incl ip ssh timeout",
+              "check_expected_output": "ip ssh timeout 60",
+              "set_command": "ip ssh timeout 60",
+              "level": 1
+            },
+            "2.1.1.1.5": {
+              "description": "Set maximum value for 'ip ssh authentication-retries' (Automated)",
+              "check_command": "show running-config | incl ip ssh authentication-retries",
+              "check_expected_output": "ip ssh authentication-retries 3",
+              "set_command": "ip ssh authentication-retries 3",
+              "level": 1
+            }
+          },
+          "2.1.1.2": {
+            "description": "Set version 2 for 'ip ssh version' (Automated)",
+            "check_command": "show running-config | incl ip ssh version",
+            "check_expected_output": "ip ssh version 2",
+            "set_command": "ip ssh version 2",
+            "level": 1
+          }
+        },
+        "2.1.2": {
+          "description": "Set 'no cdp run' (Automated)",
+          "check_command": "show running-config | incl cdp run",
+          "check_expected_output": "no cdp run",
+          "set_command": "no cdp run",
+          "level": 1
+        },
+        "2.1.3": {
+          "description": "Set 'no ip bootp server' (Automated)",
+          "check_command": "show running-config | incl ip bootp server",
+          "check_expected_output": "no ip bootp server",
+          "set_command": "no ip bootp server",
+          "level": 1
+        },
+        "2.1.4": {
+          "description": "Set 'no service dhcp' (Automated)",
+          "check_command": "show running-config | incl service dhcp",
+          "check_expected_output": "no service dhcp",
+          "set_command": "no service dhcp",
+          "level": 1
+        },
+        "2.1.5": {
+          "description": "Set 'no ip identd' (Automated)",
+          "check_command": "show running-config | incl ip identd",
+          "check_expected_output": "no ip identd",
+          "set_command": "no ip identd",
+          "level": 1
+        },
+        "2.1.6": {
+          "description": "Set 'service tcp-keepalives-in' (Automated)",
+          "check_command": "show running-config | incl service tcp-keepalives-in",
+          "check_expected_output": "service tcp-keepalives-in",
+          "set_command": "service tcp-keepalives-in",
+          "level": 1
+        },
+        "2.1.7": {
+          "description": "Set 'service tcp-keepalives-out' (Automated)",
+          "check_command": "show running-config | incl service tcp-keepalives-out",
+          "check_expected_output": "service tcp-keepalives-out",
+          "set_command": "service tcp-keepalives-out",
+          "level": 1
+        },
+        "2.1.8": {
+          "description": "Set 'no service pad' (Automated)",
+          "check_command": "show running-config | incl no service pad",
+          "check_expected_output": "no service pad",
+          "set_command": "no service pad",
+          "level": 1
+        }
+      },
+      "2.2": {
+        "description": "Logging Rules",
+        "2.2.1": {
+          "description": "Set 'logging enable' (Automated)",
+          "check_command": "show running-config | incl logging enable",
+          "check_expected_output": "logging enable",
+          "set_command": "logging enable",
+          "level": 1
+        },
+        "2.2.2": {
+          "description": "Set 'buffer size' for 'logging buffered' (Automated)",
+          "check_command": "show running-config | incl logging buffered",
+          "check_expected_output": "logging buffered 4096",
+          "set_command": "logging buffered 4096",
+          "level": 1
+        },
+        "2.2.3": {
+          "description": "Set 'logging console critical' (Automated)",
+          "check_command": "show running-config | incl logging console",
+          "check_expected_output": "logging console critical",
+          "set_command": "logging console critical",
+          "level": 1
+        },
+        "2.2.4": {
+          "description": "Set IP address for 'logging host' (Automated)",
+          "check_command": "show running-config | incl logging host",
+          "check_expected_output": "logging host <ip-address>",
+          "set_command": "logging host <ip-address>",
+          "level": 1
+        },
+        "2.2.5": {
+          "description": "Set 'logging trap informational' (Automated)",
+          "check_command": "show running-config | incl logging trap",
+          "check_expected_output": "logging trap informational",
+          "set_command": "logging trap informational",
+          "level": 1
+        },
+        "2.2.6": {
+          "description": "Set 'service timestamps debug datetime' (Automated)",
+          "check_command": "show running-config | incl service timestamps debug datetime",
+          "check_expected_output": "service timestamps debug datetime",
+          "set_command": "service timestamps debug datetime",
+          "level": 1
+        },
+        "2.2.7": {
+          "description": "Set 'logging source interface' (Automated)",
+          "check_command": "show running-config | incl logging source-interface",
+          "check_expected_output": "logging source-interface <interface>",
+          "set_command": "logging source-interface <interface>",
+          "level": 1
+        },
+        "2.2.8": {
+          "description": "Set 'login success/failure logging' (Automated)",
+          "check_command": "show running-config | incl login on-success",
+          "check_expected_output": "login on-success log",
+          "set_command": "login on-success log",
+          "level": 1
+        }
+      },
+      "2.3": {
+        "description": "NTP Rules",
+        "2.3.1": {
+          "description": "Require Encryption Keys for NTP",
+          "2.3.1.1": {
+            "description": "Set 'ntp authenticate' (Automated)",
+            "check_command": "show running-config | incl ntp authenticate",
+            "check_expected_output": "ntp authenticate",
+            "set_command": "ntp authenticate",
+            "level": 1
+          },
+          "2.3.1.2": {
+            "description": "Set 'ntp authentication-key' (Automated)",
+            "check_command": "show running-config | incl ntp authentication-key",
+            "check_expected_output": "ntp authentication-key <key-number> md5 <value>",
+            "set_command": "ntp authentication-key <key-number> md5 <value>",
+            "level": 1
+          },
+          "2.3.1.3": {
+            "description": "Set the 'ntp trusted-key' (Automated)",
+            "check_command": "show running-config | incl ntp trusted-key",
+            "check_expected_output": "ntp trusted-key <key-number>",
+            "set_command": "ntp trusted-key <key-number>",
+            "level": 1
+          },
+          "2.3.1.4": {
+            "description": "Set 'key' for each 'ntp server' (Automated)",
+            "check_command": "show running-config | incl ntp server",
+            "check_expected_output": "ntp server <ip-address> key <key-number>",
+            "set_command": "ntp server <ip-address> key <key-number>",
+            "level": 1
+          }
+        },
+        "2.3.2": {
+          "description": "Set 'ip address' for 'ntp server' (Automated)",
+          "check_command": "show running-config | incl ntp server",
+          "check_expected_output": "ntp server <ip-address>",
+          "set_command": "ntp server <ip-address>",
+          "level": 1
+        }
+      },
+      "2.4": {
+        "description": "Loopback Rules",
+        "2.4.1": {
+          "description": "Create a single 'interface loopback' (Automated)",
+          "check_command": "show running-config | incl interface loopback",
+          "check_expected_output": "interface loopback 0",
+          "set_command": "interface loopback 0",
+          "level": 1
+        },
+        "2.4.2": {
+          "description": "Set AAA 'source-interface' (Automated)",
+          "check_command": "show running-config | incl ip tacacs source-interface",
+          "check_expected_output": "ip tacacs source-interface loopback 0",
+          "set_command": "ip tacacs source-interface loopback 0",
+          "level": 1
+        },
+        "2.4.3": {
+          "description": "Set 'ntp source' to Loopback Interface (Automated)",
+          "check_command": "show running-config | incl ntp source",
+          "check_expected_output": "ntp source loopback 0",
+          "set_command": "ntp source loopback 0",
+          "level": 1
+        },
+        "2.4.4": {
+          "description": "Set 'ip tftp source-interface' to the Loopback Interface (Automated)",
+          "check_command": "show running-config | incl ip tftp source-interface",
+          "check_expected_output": "ip tftp source-interface loopback 0",
+          "set_command": "ip tftp source-interface loopback 0",
+          "level": 1
+        }
+      }
+    },
+    "3": {
+      "description": "Data Plane",
+      "3.1": {
+        "description": "Routing Rules",
+        "3.1.1": {
+          "description": "Set 'no ip source-route' (Automated)",
+          "check_command": "show running-config | incl no ip source-route",
+          "check_expected_output": "no ip source-route",
+          "set_command": "no ip source-route",
+          "level": 1
+        },
+        "3.1.2": {
+          "description": "Set 'no ip proxy-arp' (Automated)",
+          "check_command": "show running-config | incl no ip proxy-arp",
+          "check_expected_output": "no ip proxy-arp",
+          "set_command": "no ip proxy-arp",
+          "level": 1
+        },
+        "3.1.3": {
+          "description": "Set 'no interface tunnel' (Automated)",
+          "check_command": "show running-config | incl interface tunnel",
+          "check_expected_output": "no interface tunnel",
+          "set_command": "no interface tunnel",
+          "level": 1
+        },
+        "3.1.4": {
+          "description": "Set 'ip verify unicast source reachable-via' (Automated)",
+          "check_command": "show running-config | incl ip verify unicast source reachable-via",
+          "check_expected_output": "ip verify unicast source reachable-via rx",
+          "set_command": "ip verify unicast source reachable-via rx",
+          "level": 1
+        }
+      },
+      "3.2": {
+        "description": "Border Router Filtering",
+        "3.2.1": {
+          "description": "Set 'ip access-list extended' to Forbid Private Source Addresses from External Networks (Automated)",
+          "check_command": "show running-config | incl ip access-list extended",
+          "check_expected_output": "ip access-list extended BLOCK_PRIVATE",
+          "set_command": "ip access-list extended BLOCK_PRIVATE\ndeny ip 10.0.0.0 0.255.255.255 any\ndeny ip 172.16.0.0 0.15.255.255 any\ndeny ip 192.168.0.0 0.0.255.255 any\npermit ip any any",
+          "level": 1
+        },
+        "3.2.2": {
+          "description": "Set inbound 'ip access-group' on the External Interface (Automated)",
+          "check_command": "show running-config | incl ip access-group",
+          "check_expected_output": "ip access-group BLOCK_PRIVATE in",
+          "set_command": "interface <external_interface>\nip access-group BLOCK_PRIVATE in",
+          "level": 1
+        }
+      },
+      "3.3": {
+        "description": "Neighbor Authentication",
+        "3.3.1": {
+          "description": "Require EIGRP Authentication if Protocol is Used",
+          "3.3.1.1": {
+            "description": "Set 'key chain' (Automated)",
+            "check_command": "show running-config | incl key chain",
+            "check_expected_output": "key chain <chain-name>",
+            "set_command": "key chain <chain-name>",
+            "level": 1
+          },
+          "3.3.1.2": {
+            "description": "Set 'key' (Automated)",
+            "check_command": "show running-config | incl key",
+            "check_expected_output": "key <key-number>",
+            "set_command": "key <key-number>",
+            "level": 1
+          },
+          "3.3.1.3": {
+            "description": "Set 'key-string' (Automated)",
+            "check_command": "show running-config | incl key-string",
+            "check_expected_output": "key-string <password>",
+            "set_command": "key-string <password>",
+            "level": 1
+          },
+          "3.3.1.4": {
+            "description": "Set 'address-family ipv4 autonomous-system' (Automated)",
+            "check_command": "show running-config | incl address-family ipv4 autonomous-system",
+            "check_expected_output": "address-family ipv4 autonomous-system <asn>",
+            "set_command": "address-family ipv4 autonomous-system <asn>",
+            "level": 1
+          },
+          "3.3.1.5": {
+            "description": "Set 'af-interface default' (Automated)",
+            "check_command": "show running-config | incl af-interface default",
+            "check_expected_output": "af-interface default",
+            "set_command": "af-interface default",
+            "level": 1
+          },
+          "3.3.1.6": {
+            "description": "Set 'authentication key-chain' (Automated)",
+            "check_command": "show running-config | incl authentication key-chain",
+            "check_expected_output": "authentication key-chain <key-chain>",
+            "set_command": "authentication key-chain <key-chain>",
+            "level": 1
+          },
+          "3.3.1.7": {
+            "description": "Set 'authentication mode md5' (Automated)",
+            "check_command": "show running-config | incl authentication mode md5",
+            "check_expected_output": "authentication mode md5",
+            "set_command": "authentication mode md5",
+            "level": 1
+          },
+          "3.3.1.8": {
+            "description": "Set 'ip authentication key-chain eigrp' (Automated)",
+            "check_command": "show running-config | incl ip authentication key-chain eigrp",
+            "check_expected_output": "ip authentication key-chain eigrp <asn> <key-chain>",
+            "set_command": "ip authentication key-chain eigrp <asn> <key-chain>",
+            "level": 1
+          },
+          "3.3.1.9": {
+            "description": "Set 'ip authentication mode eigrp' (Automated)",
+            "check_command": "show running-config | incl ip authentication mode eigrp",
+            "check_expected_output": "ip authentication mode eigrp <asn> md5",
+            "set_command": "ip authentication mode eigrp <asn> md5",
+            "level": 1
+          }
+        },
+        "3.3.2": {
+          "description": "Require OSPF Authentication if Protocol is Used",
+          "3.3.2.1": {
+            "description": "Set 'authentication message-digest' for OSPF area (Automated)",
+            "check_command": "show running-config | incl authentication message-digest",
+            "check_expected_output": "authentication message-digest",
+            "set_command": "area <area-id> authentication message-digest",
+            "level": 1
+          },
+          "3.3.2.2": {
+            "description": "Set 'ip ospf message-digest-key md5' (Automated)",
+            "check_command": "show running-config | incl ip ospf message-digest-key",
+            "check_expected_output": "ip ospf message-digest-key <key-number> md5 <password>",
+            "set_command": "ip ospf message-digest-key <key-number> md5 <password>",
+            "level": 1
+          }
+        },
+        "3.3.3": {
+          "description": "Require BGP Authentication if Protocol is Used",
+          "3.3.3.1": {
+            "description": "Set 'neighbor password' (Automated)",
+            "check_command": "show running-config | incl neighbor",
+            "check_expected_output": "neighbor <ip-address> password <password>",
+            "set_command": "neighbor <ip-address> password <password>",
+            "level": 1
+          }
+        }
+      }
+    }
+  }
+  
