@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
     for device in device_select.results["resultats"]:
         """
-        Séléction des devices à tester...
+        Sélection des devices à tester...
         """
         print(
             title=f"Choix de score pour {device['ip']} | MODE: {device['device_type']}",
