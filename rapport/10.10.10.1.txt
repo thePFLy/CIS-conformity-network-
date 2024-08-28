@@ -1,0 +1,35 @@
++ --- || 10.10.10.1 || --- +
+| - 1 tests sur 11 passés...
+|  > Tests réussis: 1
+|  > Tests échoués: 10
++ --- Détails des tests échoués: ---------------------------- +
++ ----- Test n° 1.1.2 ---------------------------------
+| - Description: Enable 'aaa authentication login' (Automated)
+| - Level CIS: 1
++ ----- Test n° 1.1.3 ---------------------------------
+| - Description: Enable 'aaa authentication enable default' (Automated)
+| - Level CIS: 1
++ ----- Test n° 1.1.4 ---------------------------------
+| - Description: Set 'login authentication for 'line con 0' (Automated)
+| - Level CIS: 1
++ ----- Test n° 1.1.5 ---------------------------------
+| - Description: Set 'login authentication for 'line tty' (Automated)
+| - Level CIS: 1
++ ----- Test n° 1.1.6 ---------------------------------
+| - Description: Set 'login authentication for 'line vty' (Automated)
+| - Level CIS: 1
++ ----- Test n° 1.1.7 ---------------------------------
+| - Description: Set 'aaa accounting' to log all privileged use commands using 'commands 15' (Automated)
+| - Level CIS: 2
++ ----- Test n° 1.1.8 ---------------------------------
+| - Description: Set 'aaa accounting connection' (Automated)
+| - Level CIS: 2
++ ----- Test n° 1.1.9 ---------------------------------
+| - Description: Set 'aaa accounting exec' (Automated)
+| - Level CIS: 2
++ ----- Test n° 1.1.10 ---------------------------------
+| - Description: Set 'aaa accounting network' (Automated)
+| - Level CIS: 2
++ ----- Test n° 1.1.11 ---------------------------------
+| - Description: Set 'aaa accounting system' (Automated)
+| - Level CIS: 2

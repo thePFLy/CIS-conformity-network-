@@ -17,6 +17,7 @@ class SSH:
             "device_type": f"cisco_ios",
             "session_log": "ssh_log.txt"
         }
+        self.instance = None
 
     def connect_to_ssh(self):
         """
@@ -24,8 +25,8 @@ class SSH:
         La connexion restera active tant que l'instance sera existante !
         """
         try:
-            self.connection = ConnectHandler(**self.creds)
-            self.connection.enable()
+            self.instance = ConnectHandler(**self.creds)
+            self.instance.enable()
             return "réussi"
         except NetmikoAuthenticationException:
             raise NetmikoAuthenticationException(f"Échec de l'authentification pour l'appareil {self.creds['ip']}.")
@@ -40,11 +41,10 @@ class SSH:
         close ferme la connexion SSH
         :return:
         """
-        return self.instance.close()
-
+        return self.instance.disconnect()
     def execute_command(self, command: str):
         """
         Return a string if the instruction return something, else None (executed in the OS stack)
         :return: str
         """
-        return self.connection.send_command(f'{command}')
+        return self.instance.send_command(f'{command}')
