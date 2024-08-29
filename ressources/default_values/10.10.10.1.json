@@ -1,0 +1,52 @@
+{
+  "1.2.1": {
+    "expected": {
+      "LOCAL_USERNAME": "SimSim"
+    },
+    "set_command": {
+      "LOCAL_USERNAME": "SimSim"
+    }
+  },
+  "1.2.4": {
+    "expected": {
+      "vty_acl_block_with_mask": "4",
+      "vty_acl_host": "4"
+    },
+    "check_command": {
+      "vty_acl_number": "4"
+    },
+    "set_command": {
+      "vty_acl_number": "4",
+      "vty_acl_block_with_mask": "4",
+      "vty_acl_host": "4"
+    }
+  },
+  "1.2.5": {
+    "expected": {
+      "vty_acl_number": "5"
+    }
+  },
+  "1.2.6": {
+    "expected": {
+      "timeout_in_minutes": "5",
+      "timeout_in_seconds": "5"
+    }
+  },
+  "1.2.7": {
+    "expected": {
+      "timeout_in_minutes": "5",
+      "timeout_in_seconds": "5"
+    }
+  },
+  "1.2.2": {
+    "set_command": {
+      "line-number": "4",
+      "ending-line-number": "4"
+    }
+  },
+  "3.1.2": {
+    "check_command": {
+      "interface": "f0/0/1"
+    }
+  }
+}

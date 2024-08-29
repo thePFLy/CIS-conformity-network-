@@ -6,7 +6,8 @@
 * of the IOSv Software or Documentation to any third party for any       *
 * purposes is expressly prohibited except as otherwise authorized by     *
 * Cisco in writing.                                                      *
-**************************************************************************S1>
+**************************************************************************
+S1>
 S1>terminal width 511
 S1>terminal length 0
 S1>
