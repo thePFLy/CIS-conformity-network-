@@ -40,3 +40,4 @@ class Score:
         with open(file=f"rapport/{self.results['title']}.txt", mode="w", encoding="utf-8") as file:
             file.write(text)
         print(f"Un rapport à été généré dans /rapport/{self.results['title']}.txt")
+        return text
