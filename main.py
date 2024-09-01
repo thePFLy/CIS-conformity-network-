@@ -11,10 +11,7 @@ from platform import system as p_sys
 from re import findall
 from argparse import ArgumentParser
 from json import load, dumps
-from smtplib import SMTP
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-
+from keyboard import is_pressed
 
 arg = ArgumentParser()
 arg.add_argument("-d", "--daemon", action="store_true", help="Run as daemon")
@@ -84,36 +81,79 @@ def remake_tab(rec_tab: list):
                     new_tab.append(sub_point)
     return new_tab
 
-def stock_default_value(ip: str, level: str, type_command: str, key: str, default_value: str):
+def stock_default_value(ip: str, level: str, key: str, default_value: str):
     if not exists(rf"ressources/default_values/{ip}.json"):
-        with open(rf"ressources/default_values/{ip}.json", "r") as file:
-            file.write(dumps({}, indent=2))
-    else:
-        with open(rf"ressources/default_values/{ip}.json", "r") as file:
-            data = load(file)
-        if not level in data:
-            data[level] = {}
-        if not type_command in data[level]:
-            data[level][type_command] = {}
-        data[level][type_command][key] = default_value
-
         with open(rf"ressources/default_values/{ip}.json", "w") as file:
-            file.write(dumps(data, indent=2))
+            file.write(dumps({}, indent=2))
+    with open(rf"ressources/default_values/{ip}.json", "r") as file:
+        data = load(file)
+    if not level in data:
+        data[level] = {}
+    data[level][key] = default_value
 
-def complete_command(template, ip: str, level: str, type_value: str, set_mode: bool):
+    with open(rf"ressources/default_values/{ip}.json", "w") as file:
+        file.write(dumps(data, indent=2))
+
+def complete_command(template, ip: str, level: str, set_mode: bool, auto_mod: bool):
     placeholders = findall(r'<(.*?)>|\{(.*?)\}', template)
     values = []
 
+    def value_is_known(ip: str, level: str, key: str, auto_mode: bool):
+        if not exists(rf"ressources/default_values/{ip}.json"):
+            return False
+        with open(file=f"ressources/default_values/{ip}.json", mode="r", encoding="utf-8") as file:
+            data = load(file)
+        if level in data:
+            if key in data[level]:
+                    if len(data[level][key]) != 0:
+                        return data[level][key]
+        elif auto_mode:
+            raise KeyError(f"La clé {key} pour le point {level} n'a pas été trouvée dans le fichier {ip}.json ou n'as pas de valeurs...")
+        return False
+
     for placeholder in placeholders:
         if placeholder[0]:
-            question = f"[{type_value}] Entrez la valeur pour '{placeholder[0].replace('|', 'ou')}': "
-            key = placeholder[0].replace("|", "ou")
+            response = value_is_known(ip=ip, level=level, key=placeholder[0].replace("|", "ou"), auto_mode=auto_mod)
+            if response:
+                if auto_mod:
+                    value = response
+                else:
+                    print(
+                        title="Valeur existante",
+                        content=f"La valeur de {placeholder[0].replace('|', 'ou')} est {response}, voulez-vous l'éditer ?",
+                        color="red"
+                    )
+                    if input("Choix o/n: ").capitalize() == "O":
+                        key = placeholder[0].replace("|", "ou")
+                        question = f"Entrez la valeur pour '{placeholder[0].replace('|', 'ou')}': "
+                    else:
+                        continue
+            else:
+                question = f"Entrez la valeur pour '{placeholder[0].replace('|', 'ou')}': "
+                key = placeholder[0].replace("|", "ou")
         else:
-            question = f"[{type_value}] Entrez la valeur pour '{placeholder[1].replace('|', 'ou')}': "
-            key = placeholder[1].replace("|", "ou")
-        value = input(question)
+            response = value_is_known(ip=ip, level=level, key=placeholder[1].replace("|", "ou"), auto_mode=auto_mod)
+            if response:
+                if auto_mod:
+                    value = response
+                else:
+                    print(
+                        title="Valeur existante",
+                        content=f"La valeur de {placeholder[1].replace('|', 'ou')} est {response}, voulez-vous l'éditer ?",
+                        color="red"
+                    )
+                    if input("Choix o/n: ").capitalize() == "O":
+                        key = placeholder[1].replace("|", "ou")
+                        question = f"Entrez la valeur pour '{placeholder[1].replace('|', 'ou')}': "
+                    else:
+                        continue
+            else:
+                question = f"Entrez la valeur pour '{placeholder[1].replace('|', 'ou')}': "
+                key = placeholder[1].replace("|", "ou")
+        if not auto_mod:
+            value = input(question)
         if set_mode:
-            stock_default_value(ip=ip, level=level, type_command=type_value, key=key, default_value=value)
+            stock_default_value(ip=ip, level=level, key=key, default_value=value)
         values.append(value)
 
     completed_string = template
@@ -139,30 +179,20 @@ def is_expected_output(output, expected_output):
     else:
         return output == expected_output
 
-def send_mail(body_text: str):
-    with open(file="ressources/config.ini", mode="r") as file:
-        data = file.readlines()
-    data_dict = {}
-    for line in data:
-        data_dict[line.split("=")[0].strip()] = line.split("=")[1].strip()
-    msg = MIMEMultipart()
-    msg["From"] = data_dict["MAIL_SENDER"]
-    msg["To"] = data_dict["MAIL_RECIPIENT"]
-    msg["Subject"] = "Rapport d'erreur !"
-    msg.attach(MIMEText(body_text, "plain"))
-
-    try:
-        server = SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(user=data_dict["MAIL_SENDER"], password=data_dict["PASSWORD"])
-        text = msg.as_string()
-        server.sendmail(data_dict["MAIL_SENDER"], data_dict["MAIL_RECIPIENT"], text)
-    except Exception as e:
-        print(e)
-    finally:
-        server.quit()
-
-
+def try_resolve_line(ip: str, level: str):
+    content = get_dict_level(data=Recommendation().read_file(), level=level)
+    if "set_command" in content:
+        command = complete_command(template=content["set_command"], ip=ip, level=level, set_mode=arg.set_value, auto_mod=False)
+        print(
+            title="Possibilité de résolution d'erreur !",
+            content=f"Nous avons trouvé une instruction pour résoudre l'erreur du cas {level}\n"
+                    f"- Description: {content['description']}\n"
+                    f"- Commande: {command}",
+            color="red"
+        )
+        if input("Choix o/n: ").capitalize() == "O":
+            # FAIRE LA COMMANDE
+            pass
 
 
 if __name__ == "__main__":
@@ -227,14 +257,14 @@ if __name__ == "__main__":
                 set_cmd = get_dict_level(data=recc.read_file(), level=point)["set_command"]
                 expec_cmd = get_dict_level(data=recc.read_file(), level=point)["check_expected_output"]
                 check_cmd = get_dict_level(data=recc.read_file(), level=point)["check_command"]
-                check_cmd = complete_command(template=check_cmd, ip=device["ip"], level=point, type_value="check_command", set_mode=arg.set_value)
-                set_cmd = complete_command(template=set_cmd, ip=device["ip"], level=point, type_value="set_command", set_mode=arg.set_value)
+                check_cmd = complete_command(template=check_cmd, ip=device["ip"], level=point, set_mode=arg.set_value, auto_mod=False)
+                set_cmd = complete_command(template=set_cmd, ip=device["ip"], level=point, set_mode=arg.set_value, auto_mod=False)
                 try:
                     level = get_dict_level(data=recc.read_file(), level=point)["level"]
                 except:
                     level = None
                 got_answer = run_com(socket=ssh, command=check_cmd)
-                awaited_answer = complete_command(template=expec_cmd, ip=device["ip"], level=point, type_value="expected", set_mode=arg.set_value)
+                awaited_answer = complete_command(template=expec_cmd, ip=device["ip"], level=point, set_mode=arg.set_value, auto_mod=False)
                 comparaison = is_expected_output(output=got_answer, expected_output=awaited_answer)
                 if comparaison:
                     inc_win += 1
@@ -259,16 +289,81 @@ if __name__ == "__main__":
                     ip=device["ip"],
                     level=level
                 )
+            for fail in score.results:
+                if fail != "title":
+                    try_resolve_line(ip=device["ip"], level=fail)
             ssh.close()
-            send_mail(body_text=score.save())
 
     elif arg.daemon:
-        """
-        Reaction Auto
-        """
+        recc = Recommendation()
+        score = []
         with open(file=rf"ressources/default_values/hosts.json", mode="r", encoding="utf-8") as f:
-            data = load(f)["to_scan"]
+            data = load(f)
+        """
+        Gestion des scores...
+        """
+        scores = {}
+
         for ip in data:
-            print(ip)
+            print(
+                title=f"Tentative de connexion à {ip} | MODE: {data[ip]['device_type']}",
+                content=f"Vérification de l'appareil {ip}... ",
+                clear=True
+            )
+
+            score = Score(result_list=data[ip]["points"])
+
+            recc = Recommendation()
+            inc_win = 0
+            inc_fail = 0
+            max_inc = len(data[ip]["points"])
+            device_vars = ans_conf.get_devices_vars(device=data[ip]['device_type'])
+            ssh = SSH(
+                ip=ip,
+                username=device_vars["ansible_user"],
+                password=device_vars["ansible_password"],
+                port=device_vars["ansible_port"],
+                secret=device_vars["ansible_become_pass"]
+            )
+            ssh.connect_to_ssh()
+
+            for [index, point] in enumerate(data[ip]["points"], start=1):
+                description = get_dict_level(data=recc.read_file(), level=point)["description"]
+                set_cmd = get_dict_level(data=recc.read_file(), level=point)["set_command"]
+                expec_cmd = get_dict_level(data=recc.read_file(), level=point)["check_expected_output"]
+                check_cmd = get_dict_level(data=recc.read_file(), level=point)["check_command"]
+                check_cmd = complete_command(template=check_cmd, ip=ip, level=point, set_mode=arg.set_value, auto_mod=True)
+                set_cmd = complete_command(template=set_cmd, ip=ip, level=point, set_mode=arg.set_value, auto_mod=True)
+                try:
+                    level = get_dict_level(data=recc.read_file(), level=point)["level"]
+                except:
+                    level = None
+                got_answer = run_com(socket=ssh, command=check_cmd)
+                awaited_answer = complete_command(template=expec_cmd, ip=ip, level=point, set_mode=arg.set_value, auto_mod=True)
+                comparaison = is_expected_output(output=got_answer, expected_output=awaited_answer)
+                if comparaison:
+                    inc_win += 1
+                else:
+                    inc_fail += 1
+                print(
+                    title="Progression du scan...",
+                    content=f"Test en cours: {description}\n\n{index} tests sur {max_inc} passés...\nTests réussis: {inc_win}\nTests échoués: {inc_fail}",
+                    clear=True,
+                    color="cyan"
+                )
+                score.result(
+                    n_test=point,
+                    is_success=comparaison,
+                    description=get_dict_level(
+                        data=recc.read_file(),
+                        level=point
+                    )["description"],
+                    get_result=got_answer,
+                    expected=expec_cmd,
+                    command=check_cmd,
+                    ip=ip,
+                    level=level
+                )
+            ssh.close()
     else:
         print("Nothing happen...")

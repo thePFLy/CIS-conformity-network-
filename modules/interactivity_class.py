@@ -47,7 +47,7 @@ class Selection:
             else:
                 tab.append(choice.split("[")[1].split("]")[0])
         return tab
-    
+
     def question(self, data: dict):
         result = prompt([self.make_selection(data)])
         selected_indices = self.points(result=result)

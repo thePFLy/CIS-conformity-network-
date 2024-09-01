@@ -50,6 +50,27 @@ class SecureEmailSender:
         except Exception as e:
             print(f"Échec de l'envoi de l'email: {e}")
 
+    def read_config(file_path):
+        smtp_server = None
+        smtp_port = None
+
+        # Lire le fichier de configuration ligne par ligne
+        with open(file_path, 'r') as file:
+            for line in file:
+                # Ignorer les lignes vides et les sections
+                if line.strip() and not line.startswith('['):
+                    # Séparer la clé et la valeur par '='
+                    key, value = line.split('=', 1)
+                    key = key.strip()
+                    value = value.strip()
+
+                    # Assigner les valeurs aux variables appropriées
+                    if key == 'smtp_server':
+                        smtp_server = value
+                    elif key == 'smtp_port':
+                        smtp_port = int(value)  # Convertir en entier
+
+        return smtp_server, smtp_port
 
 if __name__ == "__main__":
     # exemple temporaire (à faire à partir d'un fichier) depuis le main
@@ -57,9 +78,9 @@ if __name__ == "__main__":
     smtp_port = 465
 
     secure_email_sender = SecureEmailSender(smtp_server, smtp_port)
-    recipient_email = 'destinataire@gmail.com'
+    recipient_email = 'cis.conformitynetwork@gmail.com'
     subject = 'security feedback'
-    body = ''
-    file_path = 'itsatest.txt'
+    body = 'tmp'
+    file_path = 'tmp.txt'
 
     secure_email_sender.send_email(recipient_email, subject, body, file_path)
