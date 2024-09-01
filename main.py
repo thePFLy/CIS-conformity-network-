@@ -16,10 +16,11 @@ from json import load, dumps
 from modules.mail_report import SecureEmailSender
 
 arg = ArgumentParser()
-arg.add_argument("-d", "--daemon", action="store_true", help="Run as daemon")
-arg.add_argument("-n", "--now", action="store_true", help="Run as now")
-arg.add_argument("-sv", "--set-value", action="store_true", help="Run as set value")
-arg.add_argument("-ar", "--auto-resolve", action="store_true", help="AutoResolve without confirmation")
+arg.add_argument("-d", "--daemon", action="store_true", help="Lance le script sans convoquer de input")
+arg.add_argument("-n", "--now", action="store_true", help="Executer maintenant")
+arg.add_argument("-sv", "--set-value", action="store_true", help="Si une valeur est mise à jour ou non définie, la stocker de façon permanante")
+arg.add_argument("-ar", "--auto-resolve", action="store_true", help="Résoudre automatiquement les tests ratés sans demande de confirmation")
+arg.add_argument("-uv", "--update_value", action="store_true", help="Proposer de modifier les valeurs variables si elles sont connues")
 arg = arg.parse_args()
 
 # Chargement du module de gestion des ENV
@@ -123,14 +124,17 @@ def complete_command(template, ip: str, level: str, set_mode: bool, auto_mod: bo
                 if auto_mod or level in already_set_vars and key in already_set_vars[level]:
                     value = response
                 else:
-                    print(
-                        title="Valeur existante",
-                        content=f"La valeur de {key} est {response}, voulez-vous l'éditer ?",
-                        color="red"
-                    )
-                    if input("Choix o/n: ").capitalize() == "O":
-                        question = f"Entrez la valeur pour '{key}': "
-                        value = input(question)
+                    if arg.update_value:
+                        print(
+                            title="Valeur existante",
+                            content=f"La valeur de {key} est {response}, voulez-vous l'éditer ?",
+                            color="red"
+                        )
+                        if input("Choix o/n: ").capitalize() == "O":
+                            question = f"Entrez la valeur pour '{key}': "
+                            value = input(question)
+                        else:
+                            value = response
                     else:
                         value = response
             elif not auto_mod:
@@ -146,14 +150,17 @@ def complete_command(template, ip: str, level: str, set_mode: bool, auto_mod: bo
                 if auto_mod or level in already_set_vars and key in already_set_vars[level]:
                     value = response
                 else:
-                    print(
-                        title="Valeur existante",
-                        content=f"La valeur de {key} est {response}, voulez-vous l'éditer ?",
-                        color="red"
-                    )
-                    if input("Choix o/n: ").capitalize() == "O":
-                        question = f"Entrez la valeur pour '{key}': "
-                        value = input(question)
+                    if arg.update_value:
+                        print(
+                            title="Valeur existante",
+                            content=f"La valeur de {key} est {response}, voulez-vous l'éditer ?",
+                            color="red"
+                        )
+                        if input("Choix o/n: ").capitalize() == "O":
+                            question = f"Entrez la valeur pour '{key}': "
+                            value = input(question)
+                        else:
+                            value = response
                     else:
                         value = response
             elif not auto_mod:
