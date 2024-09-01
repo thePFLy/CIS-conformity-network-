@@ -1,4 +1,3 @@
-from uaclient.cli import action_help
 import configparser
 from os import path
 from modules.ansible_config import AnsibleConfig
@@ -14,7 +13,6 @@ from platform import system as p_sys
 from re import findall
 from argparse import ArgumentParser
 from json import load, dumps
-from keyboard import is_pressed
 from modules.mail_report import SecureEmailSender
 
 arg = ArgumentParser()
@@ -397,7 +395,7 @@ if __name__ == "__main__":
             ssh.close()
 
 
-            resolve_file = 'rapport/10.10.10.1.resolve.txt'
+            resolve_file = f'rapport/{ip}.resolve.txt'
             config = configparser.ConfigParser()
             config.read('ressources/config.ini')
             smtp_server = config.get('EMAIL', 'smtp_server').strip()
@@ -406,7 +404,14 @@ if __name__ == "__main__":
 
             secure_email_sender = SecureEmailSender(smtp_server, smtp_port)
             subject = config.get('EMAIL', 'subject').strip()
-            body = 'tmp'
+
+            rapport_path = f'rapport/{ip}.txt'
+            try:
+                with open(rapport_path, 'r', encoding='utf-8') as file:
+                    body = file.read()
+            except FileNotFoundError:
+                print(f"Le fichier {rapport_path} n'a pas été trouvé.")
+                body = 'Le fichier demandé est introuvable.'
 
             if path.exists(resolve_file):
                 secure_email_sender.send_email(recipient_email, subject, body, resolve_file)
