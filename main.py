@@ -1,3 +1,5 @@
+from uaclient.cli import action_help
+
 from modules.ansible_config import AnsibleConfig
 from modules.recommendations_class import Recommendation
 from modules.interactivity_class import Selection
@@ -17,6 +19,7 @@ arg = ArgumentParser()
 arg.add_argument("-d", "--daemon", action="store_true", help="Run as daemon")
 arg.add_argument("-n", "--now", action="store_true", help="Run as now")
 arg.add_argument("-sv", "--set-value", action="store_true", help="Run as set value")
+arg.add_argument("-ar", "--auto-resolve", action="store_true", help="AutoResolve without confirmation")
 arg = arg.parse_args()
 
 # Chargement du module de gestion des ENV
@@ -103,14 +106,15 @@ def complete_command(template, ip: str, level: str, set_mode: bool, auto_mod: bo
             return False
         with open(file=f"ressources/default_values/{ip}.json", mode="r", encoding="utf-8") as file:
             data = load(file)
-        if level in data:
-            if key in data[level]:
-                    if len(data[level][key]) != 0:
-                        return data[level][key]
-        elif auto_mode:
-            raise KeyError(f"La clé {key} pour le point {level} n'a pas été trouvée dans le fichier {ip}.json ou n'as pas de valeurs...")
-        return False
-
+        try:
+            return data[level][key]
+        except:
+            if auto_mode:
+                raise KeyError(
+                    f"La clé {key} pour le point {level} n'a pas été trouvée dans le fichier {ip}.json ou n'as pas de valeurs...")
+            else:
+                return False
+            
     for placeholder in placeholders:
         if placeholder[0]:
             response = value_is_known(ip=ip, level=level, key=placeholder[0].replace("|", "ou"), auto_mode=auto_mod)
@@ -182,15 +186,16 @@ def is_expected_output(output, expected_output):
 def try_resolve_line(ip: str, level: str):
     content = get_dict_level(data=Recommendation().read_file(), level=level)
     if "set_command" in content:
-        command = complete_command(template=content["set_command"], ip=ip, level=level, set_mode=arg.set_value, auto_mod=False)
+        command = complete_command(template=content["set_command"], ip=ip, level=level, set_mode=False, auto_mod=True)
         print(
             title="Possibilité de résolution d'erreur !",
             content=f"Nous avons trouvé une instruction pour résoudre l'erreur du cas {level}\n"
                     f"- Description: {content['description']}\n"
-                    f"- Commande: {command}",
+                    f"- Commande: {command}\n"
+                    f"- AutoResolve: {'Activé' if arg.auto_resolve else 'Désactivé'}",
             color="red"
         )
-        if input("Choix o/n: ").capitalize() == "O":
+        if arg.auto_resolve:
             # FAIRE LA COMMANDE
             pass
 
