@@ -1,0 +1,7 @@
+rich
+inquirer
+keyboard
+netmiko
+ansible_runner
+keyring
+pyyaml
