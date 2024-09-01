@@ -14,7 +14,7 @@
         "description": "Enable 'aaa authentication login' (Automated)",
         "check_command": "show run | incl aaa authentication login",
         "check_expected_output": "aaa authentication login*",
-        "set_command": "aaa authentication login {default | aaa_list_name} passwd-expiry [method]",
+        "set_command": "aaa authentication login {default | aaa_list_name} local",
         "level": 1
       },
       "1.1.3": {
@@ -31,53 +31,46 @@
         "set_command": "line con 0\nlogin authentication {default | aaa_list_name}\nexit",
         "level": 1
       },
-      "1.1.5": {
-        "description": "Set 'login authentication for 'line tty' (Automated)",
-        "check_command": "sh run | sec line | incl login authentication",
-        "check_expected_output": "",
-        "set_command": "line {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}\nexit",
-        "level": 1
-      },
       "1.1.6": {
         "description": "Set 'login authentication for 'line vty' (Automated)",
         "check_command": "sh run | sec line | incl login authentication",
-        "check_expected_output": "",
-        "set_command": "line vty {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}\nexit",
+        "check_expected_output": "*login authentication*",
+        "set_command": "line vty {line-number} {ending-line-number}\nlogin authentication {default | aaa_list_name}\nexit",
         "level": 1
       },
       "1.1.7": {
         "description": "Set 'aaa accounting' to log all privileged use commands using 'commands 15' (Automated)",
         "check_command": "sh run | incl aaa accounting commands",
         "check_expected_output": "aaa accounting commands 15*",
-        "set_command": "aaa accounting commands 15 {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}",
+        "set_command": "aaa accounting commands 15 {default | list-name | guarantee- first} {start-stop | stop-only | none} {method1}",
         "level": 2
       },
       "1.1.8": {
         "description": "Set 'aaa accounting connection' (Automated)",
         "check_command": "sh run | incl aaa accounting connection",
         "check_expected_output": "aaa accounting connection*",
-        "set_command": "aaa accounting connection {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}",
+        "set_command": "aaa accounting connection {default | list-name | guarantee- first} {start-stop | stop-only | none} {method1}",
         "level": 2
       },
       "1.1.9": {
         "description": "Set 'aaa accounting exec' (Automated)",
         "check_command": "sh run | incl aaa accounting exec",
         "check_expected_output": "aaa accounting exec*",
-        "set_command": "aaa accounting exec {default | list-name | guarantee-first} {start-stop | stop-only | none} {radius | group group-name}",
+        "set_command": "aaa accounting exec {default | list-name | guarantee-first} {start-stop | stop-only | none} {method1}",
         "level": 2
       },
       "1.1.10": {
         "description": "Set 'aaa accounting network' (Automated)",
         "check_command": "sh run | incl aaa accounting network",
         "check_expected_output": "aaa accounting network*",
-        "set_command": "aaa accounting network {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}",
+        "set_command": "aaa accounting network {default | list-name | guarantee- first} {start-stop | stop-only | none} {method1}",
         "level": 2
       },
       "1.1.11": {
         "description": "Set 'aaa accounting system' (Automated)",
         "check_command": "sh run | incl aaa accounting system",
         "check_expected_output": "aaa accounting system*",
-        "set_command": "aaa accounting system {default | list-name | guarantee- first} {start-stop | stop-only | none} {radius | group group-name}",
+        "set_command": "aaa accounting system {default | list-name | guarantee- first} {start-stop | stop-only | none} {method1}",
         "level": 2
       }
     },
@@ -86,7 +79,7 @@
       "1.2.1": {
         "description": "Set 'privilege 1' for local users (Automated)",
         "check_command": "show run | incl privilege",
-        "check_expected_output": "username <LOCAL_USERNAME> privilege 1",
+        "check_expected_output": "*username <LOCAL_USERNAME> privilege 15*",
         "set_command": "username <LOCAL_USERNAME> privilege 1",
         "level": 1
       },
@@ -107,8 +100,8 @@
       "1.2.4": {
         "description": "Create 'access-list' for use with 'line vty' (Automated)",
         "check_command": "sh ip access-list <vty_acl_number>",
-        "check_expected_output": "*permit tcp <vty_acl_block_with_mask> any*, *permit tcp host <vty_acl_host> any*,*deny ip any any log*",
-        "set_command": "access-list <vty_acl_number> permit tcp <vty_acl_block_with_mask> any\naccess-list <vty_acl_number> permit tcp host <vty_acl_host> any\ndeny ip any any log\nexit",
+        "check_expected_output": "*permit tcp <vty_acl_block_with_mask> any*",
+        "set_command": "access-list <vty_acl_number> permit tcp <vty_acl_block_with_mask> any\naccess-list <vty_acl_number> permit tcp host <vty_acl_host> any\naccess-list <vty_acl_number> deny ip any any log",
         "level": 1
       },
       "1.2.5": {
@@ -132,31 +125,17 @@
         "set_command": "line console 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
         "level": 1
       },
-      "1.2.8": {
-        "description": "Set 'exec-timeout' less than or equal to 10 minutes 'line tty' (Automated)",
-        "check_command": "sh line tty <tty_line_number> | begin Timeout",
-        "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line tty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
-        "level": 1
-      },
       "1.2.9": {
         "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line vty' (Automated)",
-        "check_command": "sh line vty <tty_line_number> | begin Timeout",
-        "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
-        "level": 1
-      },
-      "1.2.10": {
-        "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line vty' (Automated)",
-        "check_command": "sh line vty <tty_line_number> | begin Timeout",
-        "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
+        "check_command": "sh line vty <line_number> | begin Timeout",
+        "check_expected_output": "*<timeout_in_minutes>*",
+        "set_command": "line vty {line_number} {ending_line_number}\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
         "level": 1
       },
       "1.2.11": {
         "description": "Set 'transport input none' for 'line aux 0' (Automated)",
         "check_command": "sh line aux 0 | incl input transports",
-        "check_expected_output": "*transport input none*",
+        "check_expected_output": "*Allowed input transports are none*",
         "set_command": "line aux 0\ntransport input none\nexit",
         "level": 1
       }

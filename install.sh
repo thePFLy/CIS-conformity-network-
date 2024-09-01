@@ -20,5 +20,9 @@ sudo apt-get install -y ansible
 echo "Installation des autres dépendances..."
 sudo apt-get install -y openssh-client
 
+echo "Configuration..."
+echo "/10 * * * simon bash /home/simon/Documents/CIS-conformity-network-/daemon.sh" | sudo tee -a /etc/crontab
+sudo chmod a+x daemon.sh 
+
 # Terminer l'installation
 echo "Installation terminée."

@@ -179,14 +179,12 @@ def complete_command(template, ip: str, level: str, set_mode: bool, auto_mod: bo
 
 
 def is_no_mode(output: str):
-    return output.startswith("no") or output.startswith("*no")
-
+    return output.startswith("no") or output.startswith("no")
 
 def is_expected_output(output, expected_output):
-    if expected_output.startswith("*") and expected_output.endswith("*") and is_no_mode(output=output) and is_no_mode(
-            output=expected_output):
+    if expected_output.startswith("*") and expected_output.endswith("*"):
         return expected_output[1:-1] in output
-    elif expected_output.startswith("*") and is_no_mode(output=output) and is_no_mode(output=expected_output):
+    elif expected_output.startswith("*"):
         return output.endswith(expected_output[1:])
     elif expected_output.endswith("*"):
         return output.startswith(expected_output[:-1])
@@ -308,10 +306,10 @@ if __name__ == "__main__":
                     solve_command=set_cmd
                 )
             for fail in score.results:
-                if fail != "title":
-                    result = try_resolve_line(ip=device["ip"], level=fail)
-                    if result is not None:
-                        run_com(socket=ssh, command=result)
+                if fail != "title" and not score.results[fail]["result"]:
+                        result = try_resolve_line(ip=device["ip"], level=fail)
+                        if result is not None:
+                            run_com(socket=ssh, command=result)
             score.save()
             ssh.close()
 
@@ -387,7 +385,7 @@ if __name__ == "__main__":
                     solve_command=set_cmd
                 )
                 for fail in score.results:
-                    if fail != "title":
+                    if fail != "title" and not score.results[fail]["result"]:
                         result = try_resolve_line(ip=ip, level=fail)
                         if result is not None:
                             run_com(socket=ssh, command=result)
