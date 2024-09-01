@@ -28,21 +28,21 @@
         "description": "Set 'login authentication for 'line con 0' (Automated)",
         "check_command": "sh run | sec line | incl login authentication",
         "check_expected_output": "*login authentication*",
-        "set_command": "line con 0\nlogin authentication {default | aaa_list_name}",
+        "set_command": "line con 0\nlogin authentication {default | aaa_list_name}\nexit",
         "level": 1
       },
       "1.1.5": {
         "description": "Set 'login authentication for 'line tty' (Automated)",
         "check_command": "sh run | sec line | incl login authentication",
         "check_expected_output": "",
-        "set_command": "line {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}",
+        "set_command": "line {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}\nexit",
         "level": 1
       },
       "1.1.6": {
         "description": "Set 'login authentication for 'line vty' (Automated)",
         "check_command": "sh run | sec line | incl login authentication",
         "check_expected_output": "",
-        "set_command": "line vty {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}",
+        "set_command": "line vty {line-number} [ending-line-number]\nlogin authentication {default | aaa_list_name}\nexit",
         "level": 1
       },
       "1.1.7": {
@@ -94,70 +94,70 @@
         "description": "Set 'transport input ssh' for 'line vty' connections (Automated)",
         "check_command": "sh run | sec vty",
         "check_expected_output": "*transport input ssh*",
-        "set_command": "line vty <line-number> <ending-line-number>\ntransport input ssh",
+        "set_command": "line vty <line-number> <ending-line-number>\ntransport input ssh\nexit",
         "level": 1
       },
       "1.2.3": {
         "description": "Set 'no exec' for 'line aux 0' (Automated)",
         "check_command": "sh run | sec aux",
         "check_expected_output": "*no exec*",
-        "set_command": "line aux 0\nno exec",
+        "set_command": "line aux 0\nno exec\nexit",
         "level": 1
       },
       "1.2.4": {
         "description": "Create 'access-list' for use with 'line vty' (Automated)",
         "check_command": "sh ip access-list <vty_acl_number>",
         "check_expected_output": "*permit tcp <vty_acl_block_with_mask> any*, *permit tcp host <vty_acl_host> any*,*deny ip any any log*",
-        "set_command": "access-list <vty_acl_number> permit tcp <vty_acl_block_with_mask> any\naccess-list <vty_acl_number> permit tcp host <vty_acl_host> any\ndeny ip any any log",
+        "set_command": "access-list <vty_acl_number> permit tcp <vty_acl_block_with_mask> any\naccess-list <vty_acl_number> permit tcp host <vty_acl_host> any\ndeny ip any any log\nexit",
         "level": 1
       },
       "1.2.5": {
         "description": "Set 'access-class' for 'line vty' (Automated)",
         "check_command": "sh run | sec vty <line-number> <ending-line-number>",
         "check_expected_output": "*access-class <vty_acl_number> in*",
-        "set_command": "line vty <line-number> <ending-line-number>\naccess-class <vty_acl_number> in",
+        "set_command": "line vty <line-number> <ending-line-number>\naccess-class <vty_acl_number> in\nexit",
         "level": 1
       },
       "1.2.6": {
         "description": "Set 'exec-timeout' to less than or equal to 10 minutes for 'line aux 0' (Automated)",
         "check_command": "sh run | sec line aux 0",
         "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line aux 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+        "set_command": "line aux 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
         "level": 1
       },
       "1.2.7": {
         "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line console 0' (Automated)",
         "check_command": "sh run | sec line con 0",
         "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line console 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+        "set_command": "line console 0\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
         "level": 1
       },
       "1.2.8": {
         "description": "Set 'exec-timeout' less than or equal to 10 minutes 'line tty' (Automated)",
         "check_command": "sh line tty <tty_line_number> | begin Timeout",
         "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line tty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+        "set_command": "line tty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
         "level": 1
       },
       "1.2.9": {
         "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line vty' (Automated)",
         "check_command": "sh line vty <tty_line_number> | begin Timeout",
         "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+        "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
         "level": 1
       },
       "1.2.10": {
         "description": "Set 'exec-timeout' to less than or equal to 10 minutes 'line vty' (Automated)",
         "check_command": "sh line vty <tty_line_number> | begin Timeout",
         "check_expected_output": "*exec-timeout <timeout_in_minutes> <timeout_in_seconds>*",
-        "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>",
+        "set_command": "line vty {line_number} [ending_line_number]\nexec-timeout <timeout_in_minutes> <timeout_in_seconds>\nexit",
         "level": 1
       },
       "1.2.11": {
         "description": "Set 'transport input none' for 'line aux 0' (Automated)",
         "check_command": "sh line aux 0 | incl input transports",
         "check_expected_output": "*transport input none*",
-        "set_command": "line aux 0\ntransport input none",
+        "set_command": "line aux 0\ntransport input none\nexit",
         "level": 1
       }
     },
@@ -167,21 +167,21 @@
         "description": "Set the 'banner-text' for 'banner exec' (Automated)",
         "check_command": "sh running-config | beg banner exec",
         "check_expected_output": "*<banner exec>*",
-        "set_command": "banner exec c\n<banner exec> c",
+        "set_command": "banner exec c\n<banner exec> c\nexit",
         "level": 1
       },
       "1.3.2": {
         "description": "Set the 'banner-text' for 'banner login' (Automated)",
         "check_command": "show running-config | beg banner login",
         "check_expected_output": "*<banner login>*",
-        "set_command": "banner login c\n<banner login> c",
+        "set_command": "banner login c\n<banner login> c\nexit",
         "level": 1
       },
       "1.3.3": {
         "description": "Set the 'banner-text' for 'banner motd' (Automated)",
         "check_command": "sh running-config | beg banner motd",
         "check_expected_output": "*<banner motd>*",
-        "set_command": "banner motd c\n<banner motd> c",
+        "set_command": "banner motd c\n<banner motd> c\nexit",
         "level": 1
       }
     },
@@ -250,7 +250,7 @@
         "description": "Create an 'access-list' for use with SNMP (Automated)",
         "check_command": "sh ip access-list <snmp_acl_number>",
         "check_expected_output": "*permit <snmp_access-list>*,*access-list deny any log*",
-        "set_command": "access-list <snmp_acl_number> permit <snmp_access-list>\naccess-list deny any log",
+        "set_command": "access-list <snmp_acl_number> permit <snmp_access-list>\naccess-list deny any log\nexit",
         "level": 1
       },
       "1.5.7": {
@@ -484,7 +484,7 @@
         "description": "Create a single 'interface loopback' (Automated)",
         "check_command": "sh ip int brief | incl Loopback",
         "check_expected_output": "*loopback*",
-        "set_command": "interface loopback {number}\nip address {loopback_ip_address} {loopback_subnet_mask}",
+        "set_command": "interface loopback {number}\nip address {loopback_ip_address} {loopback_subnet_mask}\nexit",
         "level": 2
       },
       "2.4.2": {
@@ -525,7 +525,7 @@
         "description": "Set 'no ip proxy-arp' (Manual)",
         "check_command": "sh ip int {interface} | incl proxy-arp",
         "check_expected_output": "*no ip proxy-arp*",
-        "set_command": "interface {interface}\nno ip proxy-arp",
+        "set_command": "interface {interface}\nno ip proxy-arp\nexit",
         "level": 2
       }
     },
@@ -535,14 +535,14 @@
         "description": "Set 'ip access-list extended' to Forbid Private Source Addresses from External Networks (Manual)",
         "check_command": "sh ip access-list {name | number}",
         "check_expected_output": "",
-        "set_command": "#ip access-list extended {name | number}\ndeny ip {internal_networks} any log\ndeny ip 127.0.0.0 0.255.255.255 any log\ndeny ip 10.0.0.0 0.255.255.255 any log\ndeny ip 0.0.0.0 0.255.255.255 any log\ndeny ip 172.16.0.0 0.15.255.255 any log\ndeny ip 192.168.0.0 0.0.255.255 any log\ndeny ip 192.0.2.0 0.0.0.255 any log\ndeny ip 169.254.0.0 0.0.255.255 any log\ndeny ip 224.0.0.0 31.255.255.255 any log\ndeny ip host 255.255.255.255 any log\npermit {protocol} {source_ip} {source_mask} {destination} {destination_mask} log\ndeny any any log\ninterface <external_interface>\naccess-group <access-list> in",
+        "set_command": "#ip access-list extended {name | number}\ndeny ip {internal_networks} any log\ndeny ip 127.0.0.0 0.255.255.255 any log\ndeny ip 10.0.0.0 0.255.255.255 any log\ndeny ip 0.0.0.0 0.255.255.255 any log\ndeny ip 172.16.0.0 0.15.255.255 any log\ndeny ip 192.168.0.0 0.0.255.255 any log\ndeny ip 192.0.2.0 0.0.0.255 any log\ndeny ip 169.254.0.0 0.0.255.255 any log\ndeny ip 224.0.0.0 31.255.255.255 any log\ndeny ip host 255.255.255.255 any log\npermit {protocol} {source_ip} {source_mask} {destination} {destination_mask} log\ndeny any any log\ninterface <external_interface>\naccess-group <access-list> in\n exit",
         "level": 2
       },
       "3.2.2": {
         "description": "Set inbound 'ip access-group' on the External Interface (Manual)",
         "check_command": "sh run | sec interface {external_interface}",
         "check_expected_output": "",
-        "set_command": "interface {external_interface}\nip access-group {name | number} in",
+        "set_command": "interface {external_interface}\nip access-group {name | number} in\nexit",
         "level": 2
       }
     },
@@ -562,42 +562,42 @@
           "description": "Set 'key' (Automated)",
           "check_command": "sh run | sec key chain",
           "check_expected_output": "*key chain {name}*key {key-number}*",
-          "set_command": "key chain {name}\nkey {key-number}",
+          "set_command": "key chain {name}\nkey {key-number}\nexit",
           "level": 2
         },
         "3.3.1.3": {
           "description": "Set 'key-string' (Automated)",
           "check_command": "sh run | sec key chain",
           "check_expected_output": "*key-string <key-string>*",
-          "set_command": "key chain {name}\nkey {number}\nkey-string <key-string>",
+          "set_command": "key chain {name}\nkey {number}\nkey-string <key-string>\nexit",
           "level": 2
         },
         "3.3.1.4": {
           "description": "Set 'address-family ipv4 autonomous-system' (Automated)",
           "check_command": "sh run | sec router eigrp",
           "check_expected_output": "*address-family ipv4 autonomous-system*",
-          "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}",
+          "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\nexit",
           "level": 2
         },
         "3.3.1.5": {
           "description": "Set 'af-interface default' (Automated)",
           "check_command": "sh run | sec router eigrp",
           "check_expected_output": "*router eigrp <virtual-instance-name>*address-family ipv4 autonomous-system*",
-          "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface default",
+          "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface default\nexit",
           "level": 2
         },
         "3.3.1.6": {
           "description": "Set 'authentication key-chain' (Automated)",
           "check_command": "sh run | sec router eigrp",
           "check_expected_output": "*authentication key-chain*",
-          "set_command": "router eigrp <virtual-instance-name>\nddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication key-chain {eigrp_key- chain_name}",
+          "set_command": "router eigrp <virtual-instance-name>\nddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication key-chain {eigrp_key- chain_name}\nexit",
           "level": 2
         },
         "3.3.1.7": {
           "description": "Set 'authentication mode md5' (Automated)",
           "check_command": "sh run | sec router eigrp",
           "check_expected_output": "*authentication mode md5*",
-          "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication mode md5",
+          "set_command": "router eigrp <virtual-instance-name>\naddress-family ipv4 autonomous-system {eigrp_as- number}\naf-interface {interface-name}\nauthentication mode md5\nexit",
           "level": 2
         }
       },
@@ -608,14 +608,14 @@
           "description": "Set 'authentication message-digest' for OSPF area (Automated)",
           "check_command": "sh run | sec router ospf",
           "check_expected_output": "*area <ospf_area-id> authentication message- digest*",
-          "set_command": "router ospf <ospf_process-id>\narea <ospf_area-id> authentication message-digest",
+          "set_command": "router ospf <ospf_process-id>\narea <ospf_area-id> authentication message-digest\nexit",
           "level": 2
         },
         "3.3.2.2": {
           "description": "Set 'ip ospf message-digest-key md5' (Automated)",
           "check_command": "sh run int {interface}",
           "check_expected_output": "*ip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}*",
-          "set_command": "interface {interface_name}\nip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}",
+          "set_command": "interface {interface_name}\nip ospf message-digest-key {ospf_md5_key-id} md5 {ospf_md5_key}\nexit",
           "level": 2
         }
       },
@@ -633,7 +633,7 @@
           "description": "Set 'key' (Automated)",
           "check_command": "sh run | sec key chain",
           "check_expected_output": "*key chain {name}*key {key-number}*",
-          "set_command": "key chain {name}\nkey {key-number}",
+          "set_command": "key chain {name}\nkey {key-number}\nexit",
           "level": 2
         },
         "3.3.3.3": {
@@ -647,14 +647,14 @@
           "description": "Set 'interface' for RIPv2 (Automated)",
           "check_command": "sh run int {interface_name}",
           "check_expected_output": "*authentication key-chain*",
-          "set_command": "interface {interface_name}\nip rip authentication key-chain {rip_key- chain_name}",
+          "set_command": "interface {interface_name}\nip rip authentication key-chain {rip_key- chain_name}\nexit",
           "level": 2
         },
         "3.3.3.5": {
           "description": "Set 'authentication mode md5' for RIPv2 (Automated)",
           "check_command": "sh run int <interface>",
           "check_expected_output": "*ip rip authentication mode md5*",
-          "set_command": "interface <interface_name>\nip rip authentication mode md5",
+          "set_command": "interface <interface_name>\nip rip authentication mode md5\nexit",
           "level": 2
         }
       }

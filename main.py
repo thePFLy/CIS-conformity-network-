@@ -24,6 +24,7 @@ arg = arg.parse_args()
 
 # Chargement du module de gestion des ENV
 ans_conf = AnsibleConfig()
+already_set_vars = {}
 
 def run_com(socket: object, command: str):
     return socket.execute_command(command=command)
@@ -100,7 +101,6 @@ def stock_default_value(ip: str, level: str, key: str, default_value: str):
 def complete_command(template, ip: str, level: str, set_mode: bool, auto_mod: bool):
     placeholders = findall(r'<(.*?)>|\{(.*?)\}', template)
     values = []
-
     def value_is_known(ip: str, level: str, key: str, auto_mode: bool):
         if not exists(rf"ressources/default_values/{ip}.json"):
             return False
@@ -114,50 +114,60 @@ def complete_command(template, ip: str, level: str, set_mode: bool, auto_mod: bo
                     f"La clé {key} pour le point {level} n'a pas été trouvée dans le fichier {ip}.json ou n'as pas de valeurs...")
             else:
                 return False
-            
+
     for placeholder in placeholders:
         if placeholder[0]:
-            response = value_is_known(ip=ip, level=level, key=placeholder[0].replace("|", "ou"), auto_mode=auto_mod)
+            key = placeholder[0].replace("|", "ou")
+            response = value_is_known(ip=ip, level=level, key=key, auto_mode=auto_mod)
             if response:
-                if auto_mod:
+                if auto_mod or level in already_set_vars and key in already_set_vars[level]:
                     value = response
                 else:
                     print(
                         title="Valeur existante",
-                        content=f"La valeur de {placeholder[0].replace('|', 'ou')} est {response}, voulez-vous l'éditer ?",
+                        content=f"La valeur de {key} est {response}, voulez-vous l'éditer ?",
                         color="red"
                     )
                     if input("Choix o/n: ").capitalize() == "O":
-                        key = placeholder[0].replace("|", "ou")
-                        question = f"Entrez la valeur pour '{placeholder[0].replace('|', 'ou')}': "
+                        question = f"Entrez la valeur pour '{key}': "
+                        value = input(question)
                     else:
-                        continue
+                        value = response
+            elif not auto_mod:
+                question = f"Entrez la valeur pour '{key}': "
+                value = input(question)
             else:
-                question = f"Entrez la valeur pour '{placeholder[0].replace('|', 'ou')}': "
-                key = placeholder[0].replace("|", "ou")
+                raise KeyError(
+                    f"La clé {key} pour le point {level} n'a pas été trouvée dans le fichier {ip}.json ou n'as pas de valeurs...")
         else:
-            response = value_is_known(ip=ip, level=level, key=placeholder[1].replace("|", "ou"), auto_mode=auto_mod)
+            key = placeholder[1].replace("|", "ou")
+            response = value_is_known(ip=ip, level=level, key=key, auto_mode=auto_mod)
             if response:
-                if auto_mod:
+                if auto_mod or level in already_set_vars and key in already_set_vars[level]:
                     value = response
                 else:
                     print(
                         title="Valeur existante",
-                        content=f"La valeur de {placeholder[1].replace('|', 'ou')} est {response}, voulez-vous l'éditer ?",
+                        content=f"La valeur de {key} est {response}, voulez-vous l'éditer ?",
                         color="red"
                     )
                     if input("Choix o/n: ").capitalize() == "O":
-                        key = placeholder[1].replace("|", "ou")
-                        question = f"Entrez la valeur pour '{placeholder[1].replace('|', 'ou')}': "
+                        question = f"Entrez la valeur pour '{key}': "
+                        value = input(question)
                     else:
-                        continue
+                        value = response
+            elif not auto_mod:
+                question = f"Entrez la valeur pour '{key}': "
+                value = input(question)
             else:
-                question = f"Entrez la valeur pour '{placeholder[1].replace('|', 'ou')}': "
-                key = placeholder[1].replace("|", "ou")
-        if not auto_mod:
-            value = input(question)
+                raise KeyError(
+                    f"La clé {key} pour le point {level} n'a pas été trouvée dans le fichier {ip}.json ou n'as pas de valeurs...")
+
         if set_mode:
             stock_default_value(ip=ip, level=level, key=key, default_value=value)
+            if level not in already_set_vars:
+                already_set_vars[level] = None
+            already_set_vars[level] = key
         values.append(value)
 
     completed_string = template
@@ -187,17 +197,19 @@ def try_resolve_line(ip: str, level: str):
     content = get_dict_level(data=Recommendation().read_file(), level=level)
     if "set_command" in content:
         command = complete_command(template=content["set_command"], ip=ip, level=level, set_mode=False, auto_mod=True)
+        text = ""
+        if arg.auto_resolve:
+            text = "\n- La commande de résolution a été executée..."
         print(
             title="Possibilité de résolution d'erreur !",
             content=f"Nous avons trouvé une instruction pour résoudre l'erreur du cas {level}\n"
                     f"- Description: {content['description']}\n"
                     f"- Commande: {command}\n"
-                    f"- AutoResolve: {'Activé' if arg.auto_resolve else 'Désactivé'}",
+                    f"- AutoResolve: {'Activé' if arg.auto_resolve else 'Désactivé'}{text}",
             color="red"
         )
         if arg.auto_resolve:
-            # FAIRE LA COMMANDE
-            pass
+            return command
 
 
 if __name__ == "__main__":
@@ -259,6 +271,12 @@ if __name__ == "__main__":
 
             for [index, point] in enumerate(rec.results["resultats"], start=1):
                 description = get_dict_level(data=recc.read_file(), level=point)["description"]
+                print(
+                    title=f"[{point}] Progression du scan...",
+                    content=f"Test en cours: {description}\n\n{index} tests sur {max_inc} passés...\nTests réussis: {inc_win}\nTests échoués: {inc_fail}",
+                    clear=True,
+                    color="cyan"
+                )
                 set_cmd = get_dict_level(data=recc.read_file(), level=point)["set_command"]
                 expec_cmd = get_dict_level(data=recc.read_file(), level=point)["check_expected_output"]
                 check_cmd = get_dict_level(data=recc.read_file(), level=point)["check_command"]
@@ -275,12 +293,6 @@ if __name__ == "__main__":
                     inc_win += 1
                 else:
                     inc_fail += 1
-                print(
-                    title="Progression du scan...",
-                    content=f"Test en cours: {description}\n\n{index} tests sur {max_inc} passés...\nTests réussis: {inc_win}\nTests échoués: {inc_fail}",
-                    clear=True,
-                    color="cyan"
-                )
                 score.result(
                     n_test=point,
                     is_success=comparaison,
@@ -292,11 +304,15 @@ if __name__ == "__main__":
                     expected=expec_cmd,
                     command=check_cmd,
                     ip=device["ip"],
-                    level=level
+                    level=level,
+                    solve_command=set_cmd
                 )
             for fail in score.results:
                 if fail != "title":
-                    try_resolve_line(ip=device["ip"], level=fail)
+                    result = try_resolve_line(ip=device["ip"], level=fail)
+                    if result is not None:
+                        run_com(socket=ssh, command=result)
+            score.save()
             ssh.close()
 
     elif arg.daemon:
@@ -334,6 +350,12 @@ if __name__ == "__main__":
 
             for [index, point] in enumerate(data[ip]["points"], start=1):
                 description = get_dict_level(data=recc.read_file(), level=point)["description"]
+                print(
+                    title=f"[{point}] Progression du scan...",
+                    content=f"Test en cours: {description}\n\n{index} tests sur {max_inc} passés...\nTests réussis: {inc_win}\nTests échoués: {inc_fail}",
+                    clear=True,
+                    color="cyan"
+                )
                 set_cmd = get_dict_level(data=recc.read_file(), level=point)["set_command"]
                 expec_cmd = get_dict_level(data=recc.read_file(), level=point)["check_expected_output"]
                 check_cmd = get_dict_level(data=recc.read_file(), level=point)["check_command"]
@@ -350,12 +372,6 @@ if __name__ == "__main__":
                     inc_win += 1
                 else:
                     inc_fail += 1
-                print(
-                    title="Progression du scan...",
-                    content=f"Test en cours: {description}\n\n{index} tests sur {max_inc} passés...\nTests réussis: {inc_win}\nTests échoués: {inc_fail}",
-                    clear=True,
-                    color="cyan"
-                )
                 score.result(
                     n_test=point,
                     is_success=comparaison,
@@ -367,8 +383,15 @@ if __name__ == "__main__":
                     expected=expec_cmd,
                     command=check_cmd,
                     ip=ip,
-                    level=level
+                    level=level,
+                    solve_command=set_cmd
                 )
+                for fail in score.results:
+                    if fail != "title":
+                        result = try_resolve_line(ip=ip, level=fail)
+                        if result is not None:
+                            run_com(socket=ssh, command=result)
+                score.save()
             ssh.close()
     else:
         print("Nothing happen...")
