@@ -71,16 +71,3 @@ class SecureEmailSender:
                         smtp_port = int(value)  # Convertir en entier
 
         return smtp_server, smtp_port
-
-if __name__ == "__main__":
-    # exemple temporaire (à faire à partir d'un fichier) depuis le main
-    smtp_server = 'smtp.gmail.com'
-    smtp_port = 465
-
-    secure_email_sender = SecureEmailSender(smtp_server, smtp_port)
-    recipient_email = 'cis.conformitynetwork@gmail.com'
-    subject = 'security feedback'
-    body = 'tmp'
-    file_path = 'tmp.txt'
-
-    secure_email_sender.send_email(recipient_email, subject, body, file_path)

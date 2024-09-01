@@ -1,5 +1,6 @@
 from uaclient.cli import action_help
-
+import configparser
+from os import path
 from modules.ansible_config import AnsibleConfig
 from modules.recommendations_class import Recommendation
 from modules.interactivity_class import Selection
@@ -14,6 +15,7 @@ from re import findall
 from argparse import ArgumentParser
 from json import load, dumps
 from keyboard import is_pressed
+from modules.mail_report import SecureEmailSender
 
 arg = ArgumentParser()
 arg.add_argument("-d", "--daemon", action="store_true", help="Run as daemon")
@@ -393,5 +395,22 @@ if __name__ == "__main__":
                             run_com(socket=ssh, command=result)
                 score.save()
             ssh.close()
+
+
+            resolve_file = 'rapport/10.10.10.1.resolve.txt'
+            config = configparser.ConfigParser()
+            config.read('ressources/config.ini')
+            smtp_server = config.get('EMAIL', 'smtp_server').strip()
+            smtp_port = config.get('EMAIL', 'smtp_port').strip()
+            recipient_email = config.get('EMAIL', 'recipient_email').strip()
+
+            secure_email_sender = SecureEmailSender(smtp_server, smtp_port)
+            subject = config.get('EMAIL', 'subject').strip()
+            body = 'tmp'
+
+            if path.exists(resolve_file):
+                secure_email_sender.send_email(recipient_email, subject, body, resolve_file)
+            else:
+                print("resolve.txt n'existe pas. Email non envoyé.")
     else:
         print("Nothing happen...")
